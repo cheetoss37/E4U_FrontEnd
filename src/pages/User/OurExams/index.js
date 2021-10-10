@@ -2,9 +2,9 @@ import React from "react";
 import { makeStyles, Box } from "@material-ui/core";
 import Usernavbar from "../../../components/UserNavbar";
 
-const About = () => {
+const OurExams = () => {
   const classes = useStyles();
-
+  
   return (
     <Box>
       <Usernavbar />
@@ -12,6 +12,6 @@ const About = () => {
   );
 };
 
-export default About;
+export default OurExams;
 
 const useStyles = makeStyles((theme) => ({}));

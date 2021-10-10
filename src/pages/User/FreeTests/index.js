@@ -1,10 +1,10 @@
 import React from 'react'
 import { makeStyles, Box } from '@material-ui/core'
-import Usernavbar from '../../../components/UserNavbar'
+import Usernavbar from '../../../components/UserNavbar';
 
-const Home = () => {
+const FreeTests = () => {
     const classes = useStyles();
-    
+
     return (
         <Box>
             <Usernavbar />
@@ -12,8 +12,8 @@ const Home = () => {
     )
 }
 
-export default Home
+export default FreeTests
 
-const useStyles = makeStyles ((theme) => ({
+const useStyles = makeStyles((theme) => ({
 
 }))
