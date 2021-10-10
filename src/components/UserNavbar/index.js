@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import AppLogo from "../../assets/icons/home-logo.png";
 import { Link, useLocation } from "react-router-dom";
-import { ABOUT, FREE_TEST, OUR_EXAMS, LOGIN } from "../../constants/path.const";
+import { ABOUT, FREE_TEST, OUR_EXAMS, LOGIN, HOME } from "../../constants/path.const";
 const Usernavbar = () => {
   const classes = useStyles();
   const location = useLocation();
@@ -17,7 +17,7 @@ const Usernavbar = () => {
   return (
     <AppBar className={classes.appBar}>
       <Box className={classes.appBarContainer}>
-        <Box className={classes.appBarLeft}>
+        <Box className={classes.appBarLeft} component={Link} to={HOME}>
           <img src={AppLogo} alt="app-logo" className={classes.appLogo} />
         </Box>
         <Box className={classes.appBarRight}>
