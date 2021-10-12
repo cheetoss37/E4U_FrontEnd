@@ -1,19 +1,27 @@
-import React from 'react'
-import { makeStyles, Box } from '@material-ui/core'
-import Usernavbar from '../../../components/UserNavbar'
+import React from "react";
+import { makeStyles, Box } from "@material-ui/core";
+import Usernavbar from "../../../components/UserNavbar";
+import HomeBody from "./components/HomeBody";
+import AppFooter from "../../../components/AppFooter";
 
 const Home = () => {
-    const classes = useStyles();
-    
-    return (
-        <Box>
-            <Usernavbar />
-        </Box>
-    )
-}
+  const classes = useStyles();
 
-export default Home
+  return (
+    <Box className={classes.homeContainer}>
+      <Usernavbar />
+      <HomeBody />
+      <AppFooter />
+    </Box>
+  );
+};
 
-const useStyles = makeStyles ((theme) => ({
+export default Home;
 
-}))
+const useStyles = makeStyles((theme) => ({
+  homeContainer: {
+    display: "flex",
+    flexDirection: "column",
+    height: "100vh"
+  }
+}));
