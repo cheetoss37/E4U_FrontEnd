@@ -12,7 +12,7 @@ const AppFooter = () => {
           <Typography> Head Office: Tay Son, Dong Da, Hanoi </Typography>
           <Typography> Contact Us: minhtung112@gmail.com  </Typography>
         </Box>
-        <Box className={classes.leftBody}>
+        <Box className={classes.rightBody}>
           <Typography className={classes.languageText}>Languages: </Typography>
           <Box className={classes.languagesBox}>
           <Typography className={classes.engText}>English </Typography>
@@ -33,8 +33,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     height: 120,
     flex: "0 1 auto",
-    [theme.breakpoints.down("xs")]: {
-      display: "none"
+    [theme.breakpoints.down("sm")]: {
+      height: "auto"
     },
   },
   footerBody: {
@@ -43,6 +43,16 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(20),
     display: "flex",
     justifyContent: "space-between",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+      marginLeft: theme.spacing(2),
+      width: "80%"
+    },
+  },
+  rightBody: {
+    [theme.breakpoints.down("sm")]: {
+      marginTop: theme.spacing(2)
+    },
   },
   appText: {
     fontWeight: "bold"

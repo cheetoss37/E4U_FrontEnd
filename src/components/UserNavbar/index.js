@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   makeStyles,
   AppBar,
@@ -6,60 +6,92 @@ import {
   Typography,
   Avatar,
   Button,
+  useMediaQuery,
+  useTheme,
 } from "@material-ui/core";
+import { Menu } from "@material-ui/icons";
 import AppLogo from "../../assets/icons/home-logo.png";
 import { Link, useLocation } from "react-router-dom";
-import { ABOUT, FREE_TEST, OUR_EXAMS, LOGIN, HOME } from "../../constants/path.const";
+import {
+  ABOUT,
+  FREE_TEST,
+  OUR_EXAMS,
+  LOGIN,
+  HOME,
+} from "../../constants/path.const";
+import MobileMenu from "./components/MobileMenu";
 const Usernavbar = () => {
   const classes = useStyles();
   const location = useLocation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const onMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const onClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <AppBar className={classes.appBar}>
       <Box className={classes.appBarContainer}>
-        <Box className={classes.appBarLeft} component={Link} to={HOME}>
-          <img src={AppLogo} alt="app-logo" className={classes.appLogo} />
+        <Box className={classes.appBarLeft}>
+          <Box className={classes.logoField} component={Link} to={HOME}>
+            <img src={AppLogo} alt="app-logo" className={classes.appLogo} />
+          </Box>
+          {isMobile && (
+            <>
+              <Menu onClick={onMenuOpen} className={classes.menuIcon}/>
+              <MobileMenu anchorEl={anchorEl} onClose={onClose} />
+            </>
+          )}
         </Box>
         <Box className={classes.appBarRight}>
-          <Box className={classes.appLink}>
-            <Typography
-              className={
-                location.pathname === ABOUT
-                  ? classes.selectedLink
-                  : classes.linkText
-              }
-              component={Link}
-              to={ABOUT}
-            >
-              About us
-            </Typography>
-            <Typography
-              className={
-                location.pathname === OUR_EXAMS
-                  ? classes.selectedLink
-                  : classes.linkText
-              }
-              component={Link}
-              to={OUR_EXAMS}
-            >
-              Our exams
-            </Typography>
-            <Typography
-              className={
-                location.pathname === FREE_TEST
-                  ? classes.selectedLink
-                  : classes.linkText
-              }
-              component={Link}
-              to={FREE_TEST}
-            >
-              Free tests
-            </Typography>
-          </Box>
+          {!isMobile && (
+            <Box className={classes.appLink}>
+              <Typography
+                className={
+                  location.pathname === ABOUT
+                    ? classes.selectedLink
+                    : classes.linkText
+                }
+                component={Link}
+                to={ABOUT}
+              >
+                About us
+              </Typography>
+              <Typography
+                className={
+                  location.pathname === OUR_EXAMS
+                    ? classes.selectedLink
+                    : classes.linkText
+                }
+                component={Link}
+                to={OUR_EXAMS}
+              >
+                Our exams
+              </Typography>
+              <Typography
+                className={
+                  location.pathname === FREE_TEST
+                    ? classes.selectedLink
+                    : classes.linkText
+                }
+                component={Link}
+                to={FREE_TEST}
+              >
+                Free tests
+              </Typography>
+            </Box>
+          )}
           <Box className={classes.appUser}>
             {/* <Avatar /> */}
             <Button className={classes.loginBtn} component={Link} to={LOGIN}>
-              <Typography>Login</Typography>
+              <Typography className={classes.loginBtnText}>Login</Typography>
             </Button>
           </Box>
         </Box>
@@ -84,12 +116,24 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0, 2, 0, 2),
     justifyContent: "space-between",
   },
+  logoField: {
+    [theme.breakpoints.down("sm")]: {
+      borderRight: "2px solid #C4C4C4",
+    },
+  },
   appLogo: {
     width: 60,
     height: 60,
   },
+  appBarLeft: {
+    display: "flex",
+    alignItems: "center",
+  },
   appBarRight: {
     display: "flex",
+  },
+  menuIcon: {
+    marginLeft: theme.spacing(2)
   },
   appLink: {
     display: "flex",
@@ -98,10 +142,12 @@ const useStyles = makeStyles((theme) => ({
   },
   linkText: {
     margin: theme.spacing(0, 2, 0, 2),
+    fontWeight: "bold",
   },
   selectedLink: {
     margin: theme.spacing(0, 2, 0, 2),
     color: "#FA811B",
+    fontWeight: "bold",
   },
   loginBtn: {
     textTransform: "none",
@@ -112,5 +158,8 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     borderRadius: 50,
     padding: theme.spacing(1, 2, 1, 2),
+  },
+  loginBtnText: {
+    fontWeight: "bold",
   },
 }));
