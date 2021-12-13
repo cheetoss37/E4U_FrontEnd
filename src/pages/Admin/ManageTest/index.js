@@ -1,19 +1,19 @@
 import React from "react";
 import { makeStyles, Box } from "@material-ui/core";
 import AdminNavbar from "../../../components/AdminNavbar";
-import AdminHomeBody from "./components/AdminHomeBody";
+import ManageTestBody from "./components/ManageTestBody";
 
-const AdminHome = () => {
+const ManageTest = () => {
   const classes = useStyles();
 
   return (
-    <Box className={classes.homeContainer}>
+    <Box className={classes.manageTestContainer}>
       <AdminNavbar />
-      <AdminHomeBody />
+      <ManageTestBody />
     </Box>
   );
 };
 
-export default AdminHome;
+export default ManageTest;
 
 export const useStyles = makeStyles((theme) => ({}));
