@@ -3,6 +3,8 @@ import { makeStyles, Box, Typography, Button } from "@material-ui/core";
 import FreeTestImg1 from "../../../../assets/images/free-test-1.png";
 import FreeTestImg2 from "../../../../assets/images/free-test-2.png";
 import FreeTestImg3 from "../../../../assets/images/free-test-3.png";
+import { Link } from "react-router-dom";
+import { PathConst } from "../../../../constants";
 
 const FreeTestsBody = () => {
   const classes = useStyles();
@@ -37,7 +39,11 @@ const FreeTestsBody = () => {
                   {item.testDescription}
                 </Typography>
               </Box>
-              <Box className={classes.btnField}>
+              <Box
+                className={classes.btnField}
+                component={Link}
+                to={`do-test/${item.id}`}
+              >
                 <Button className={classes.doTestBtn}>Làm bài kiểm tra</Button>
               </Box>
             </Box>
@@ -91,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
     },
   },
   testItemLeft: {

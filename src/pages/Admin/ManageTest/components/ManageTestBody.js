@@ -1,14 +1,71 @@
-import React from "react";
-import { makeStyles, Box, Typography } from "@material-ui/core";
+import React, { useState } from "react";
+import {
+  makeStyles,
+  Box,
+  Typography,
+  InputBase,
+  Button,
+} from "@material-ui/core";
 import AdminSidebar from "../../../../components/AdminSidebar";
+import { Pagination } from "@material-ui/lab";
+import { getTestStatus, getTestLevel } from "../../../../utils";
+import ActionMenu from "./ActionMenu";
 
 const ManageTestBody = () => {
   const classes = useStyles();
 
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const onMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const onClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Box className={classes.homeContainer}>
       <AdminSidebar />
-      <Box className={classes.homeBody}>manage test</Box>
+      <Box className={classes.homeBody}>
+        <Box className={classes.testContainer}>
+          <Box className={classes.manageTestHeader}>
+            <InputBase
+              placeholder="Tìm kiếm..."
+              className={classes.searchInput}
+            />
+            <Button className={classes.addBtn}>Tạo bài kiểm tra</Button>
+          </Box>
+          <Box className={classes.manageTestBody}>
+            {FAKE_DATA.map((data) => (
+              <Box className={classes.testRow} key={data?.testId}>
+                <Box className={classes.testName}>
+                  <Typography className={classes.content}>
+                    {data?.testName}
+                  </Typography>
+                </Box>
+                <Box className={classes.testLevel}>
+                  <Typography className={classes.content}>
+                    Độ khó: {getTestLevel(data?.testLevel)}
+                  </Typography>
+                </Box>
+                <Box className={classes.testStatus}>
+                  <Typography className={classes.content}>
+                    Trạng thái: {getTestStatus(data?.testStatus)}
+                  </Typography>
+                </Box>
+                <Box className={classes.actionField} onClick={onMenuOpen}>
+                  <Typography className={classes.content}>Chức năng</Typography>
+                </Box>
+                <ActionMenu anchorEl={anchorEl} onClose={onClose} />
+              </Box>
+            ))}
+          </Box>
+          <Box className={classes.manageTestFooter}>
+            <Pagination count={10} variant="outlined" shape="rounded" />
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 };
@@ -17,8 +74,85 @@ export default ManageTestBody;
 
 export const useStyles = makeStyles((theme) => ({
   homeContainer: {
-    margin: theme.spacing(2),
+    margin: 0,
     display: "flex",
   },
-  homeBody: {},
+  homeBody: {
+    flex: "1 1 auto",
+    padding: theme.spacing(2, 1, 2, 1),
+    background: "#9B9B9B",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  testContainer: {
+    background: "white",
+    width: "95%",
+    height: "95%",
+    borderRadius: 16,
+    padding: theme.spacing(2),
+    display: "flex",
+    flexDirection: "column",
+  },
+  manageTestHeader: {
+    flex: "0 1 auto",
+  },
+  manageTestBody: {
+    flex: "1 1 auto",
+    padding: theme.spacing(1, 0),
+  },
+  manageTestFooter: {
+    flex: "0 1 auto",
+  },
+  searchInput: {
+    border: "1px solid #C4C4C4",
+    borderRadius: 3,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    minWidth: 450,
+    marginRight: theme.spacing(5),
+  },
+  addBtn: {
+    background: "#F99846",
+    textTransform: "none",
+  },
+  testRow: {
+    display: "flex",
+    border: "1px solid #C4C4C4",
+    borderRadius: 3,
+    marginBottom: theme.spacing(3),
+  },
+  testName: {
+    width: "40%",
+    padding: theme.spacing(0, 2),
+    borderRight: "1px solid #C4C4C4",
+  },
+  testStatus: {
+    width: "20%",
+    padding: theme.spacing(0, 2),
+    borderRight: "1px solid #C4C4C4",
+  },
+  testLevel: {
+    width: "20%",
+    padding: theme.spacing(0, 2),
+    borderRight: "1px solid #C4C4C4",
+  },
+  actionField: {
+    width: "10%",
+    padding: theme.spacing(0, 2),
+    display: "flex",
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
+  content: {
+    padding: theme.spacing(1, 0),
+  },
 }));
+
+const FAKE_DATA = [
+  { testId: 1, testName: "Bài kiểm tra 1", testLevel: 2, testStatus: 2 },
+  { testId: 2, testName: "Bài kiểm tra 2", testLevel: 3, testStatus: 1 },
+  { testId: 3, testName: "Bài kiểm tra 3", testLevel: 2, testStatus: 2 },
+  { testId: 4, testName: "Bài kiểm tra 4", testLevel: 1, testStatus: 1 },
+];

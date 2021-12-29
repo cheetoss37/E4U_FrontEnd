@@ -11,21 +11,33 @@ const AdminSidebar = () => {
     <Box className={classes.sidebarContainer}>
       <Box className={classes.sidebarBody}>
         <Box
-          className={classes.sidebarItem}
+          className={
+            location.pathname === PathConst.MANAGE_USER
+              ? classes.sidebarItemActive
+              : classes.sidebarItem
+          }
           component={Link}
           to={PathConst.MANAGE_USER}
         >
           <Typography>Quản lý người dùng</Typography>
         </Box>
         <Box
-          className={classes.sidebarItem}
+          className={
+            location.pathname === PathConst.MANAGE_TEST
+              ? classes.sidebarItemActive
+              : classes.sidebarItem
+          }
           component={Link}
           to={PathConst.MANAGE_TEST}
         >
           <Typography>Quản lý bài kiểm tra</Typography>
         </Box>
         <Box
-          className={classes.sidebarItem}
+          className={
+            location.pathname === PathConst.MANAGE_QUESTION
+              ? classes.sidebarItemActive
+              : classes.sidebarItem
+          }
           component={Link}
           to={PathConst.MANAGE_QUESTION}
         >
@@ -43,16 +55,25 @@ const useStyles = makeStyles((theme) => ({
     height: "calc(100vh - 80px)",
     width: 256,
     borderRight: "1px solid #DFE9EE",
+    background: "#383F4B",
+    color: "white",
+    flex: "0 1 auto",
   },
   sidebarBody: {
-    margin: theme.spacing(0, 2, 0, 2),
     display: "flex",
     flexDirection: "column",
   },
   sidebarItem: {
-    margin: theme.spacing(1, 0, 1, 0),
+    margin: theme.spacing(2, 1, 2, 1),
     "&:hover": {
       cursor: "pointer",
     },
+  },
+  sidebarItemActive: {
+    padding: theme.spacing(2, 1, 2, 1),
+    "&:hover": {
+      cursor: "pointer",
+    },
+    background: "#FA811B",
   },
 }));

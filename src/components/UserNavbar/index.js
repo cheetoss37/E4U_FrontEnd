@@ -20,13 +20,18 @@ import {
   HOME,
 } from "../../constants/path.const";
 import MobileMenu from "./components/MobileMenu";
+import { AppConst } from "../../constants";
+import UserOptions from "./components/UserOptions";
+
 const Usernavbar = () => {
   const classes = useStyles();
   const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const userInfo = JSON.parse(localStorage.getItem(AppConst.USER_PROFILE));
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [userAnchorEl, setUserAnchorEl] = useState(null);
 
   const onMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,6 +39,11 @@ const Usernavbar = () => {
 
   const onClose = () => {
     setAnchorEl(null);
+    setUserAnchorEl(null);
+  };
+
+  const onOpenUserOption = (event) => {
+    setUserAnchorEl(event.currentTarget);
   };
 
   return (
@@ -45,7 +55,7 @@ const Usernavbar = () => {
           </Box>
           {isMobile && (
             <>
-              <Menu onClick={onMenuOpen} className={classes.menuIcon}/>
+              <Menu onClick={onMenuOpen} className={classes.menuIcon} />
               <MobileMenu anchorEl={anchorEl} onClose={onClose} />
             </>
           )}
@@ -89,10 +99,17 @@ const Usernavbar = () => {
             </Box>
           )}
           <Box className={classes.appUser}>
-            {/* <Avatar /> */}
-            <Button className={classes.loginBtn} component={Link} to={LOGIN}>
-              <Typography className={classes.loginBtnText}>Login</Typography>
-            </Button>
+            {userInfo ? (
+              <Avatar
+                src={userInfo?.user?.profilePic}
+                onClick={onOpenUserOption}
+              />
+            ) : (
+              <Button className={classes.loginBtn} component={Link} to={LOGIN}>
+                <Typography className={classes.loginBtnText}>Login</Typography>
+              </Button>
+            )}
+            <UserOptions anchorEl={userAnchorEl} onClose={onClose} />
           </Box>
         </Box>
       </Box>
@@ -133,7 +150,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   menuIcon: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   appLink: {
     display: "flex",

@@ -11,7 +11,7 @@ import GroupImg from "../../../../assets/icons/group-icons.png";
 import PaperImg from "../../../../assets/icons/card-icon2.png";
 import PhoneImg from "../../../../assets/icons/card-icon3.png";
 import { Link } from "react-router-dom";
-import { FREE_TEST, OUR_EXAMS } from "../../../../constants/path.const";
+import { FREE_TEST } from "../../../../constants/path.const";
 
 const HomeBody = () => {
   const classes = useStyles();
@@ -112,7 +112,7 @@ const HomeBody = () => {
           </Box>
         </Box>
         <Box className={classes.examsFooter}>
-          <Button className={classes.examsBtn} component={Link} to={OUR_EXAMS}>
+          <Button className={classes.examsBtn} component={Link} to={FREE_TEST}>
             Các bài kiểm tra
           </Button>
         </Box>

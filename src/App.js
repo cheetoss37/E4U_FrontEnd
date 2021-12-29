@@ -13,6 +13,7 @@ import AdminHome from "./pages/Admin/Home";
 import ManageTest from "./pages/Admin/ManageTest";
 import ManageUser from "./pages/Admin/ManageUser";
 import ManageQuestion from "./pages/Admin/ManageQuestion";
+import DoTest from "./pages/User/DoTest";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
           <Route path={PathConst.ABOUT} component={About} />
           <Route path={PathConst.OUR_EXAMS} component={OurExams} />
           <Route path={PathConst.FREE_TEST} component={FreeTests} />
+          <Route path={PathConst.DO_TESTS} component={DoTest} />
           <Route path={PathConst.ADMIN_HOME} component={AdminHome} />
           <Route path={PathConst.MANAGE_TEST} component={ManageTest} />
           <Route path={PathConst.MANAGE_USER} component={ManageUser} />

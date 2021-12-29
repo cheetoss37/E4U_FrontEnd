@@ -8,10 +8,23 @@ import {
   Avatar,
 } from "@material-ui/core";
 import { ADMIN_HOME } from "../../constants/path.const";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AppLogo from "../../assets/icons/home-logo.png";
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import * as actions from "../../redux/actions";
+import { AppConst, PathConst } from "../../constants";
+
 const AdminNavbar = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const onLogout = () => {
+    dispatch(actions.reset());
+    localStorage.removeItem(AppConst.USER_PROFILE);
+    history.push(PathConst.HOME);
+  };
 
   return (
     <AppBar className={classes.appBar}>
@@ -24,7 +37,7 @@ const AdminNavbar = () => {
         <Box className={classes.appBarRight}>
           <Box className={classes.appUser}>
             <Avatar />
-            <Button className={classes.logoutBtn}>
+            <Button className={classes.logoutBtn} onClick={onLogout}>
               <Typography className={classes.logoutBtnText}>Logout</Typography>
             </Button>
           </Box>

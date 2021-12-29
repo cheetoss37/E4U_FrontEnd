@@ -16,4 +16,4 @@ const AdminHome = () => {
 
 export default AdminHome;
 
-export const useStyles = makeStyles((theme) => ({}));
+export const useStyles = makeStyles(() => ({}));

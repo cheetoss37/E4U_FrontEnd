@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   makeStyles,
   Box,
@@ -10,9 +10,42 @@ import AppLogo from "../../assets/icons/home-logo.png";
 import { PersonOutline, VpnKey } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { REGISTER, HOME } from "../../constants/path.const";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../../redux/actions";
+import { AppConst, PathConst } from "../../constants";
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const isAuth = useSelector((state) => state.auth.isAuth);
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const onUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const onPassChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const onLogin = () => {
+    const account = {
+      username: username,
+      password: password,
+    };
+    dispatch(actions.postLoginStart(account));
+  };
+
+  useEffect(() => {
+    if (isAuth) {
+      history.push(PathConst.HOME);
+    }
+  }, [isAuth]);
+
   return (
     <Box className={classes.loginContainer}>
       <Box className={classes.loginBody}>
@@ -23,7 +56,9 @@ const Login = () => {
         </Box>
         <Box className={classes.rightBody}>
           <Box className={classes.formHeader}>
-            <Typography className={classes.welcomeText}>Welcome back to E4U</Typography>
+            <Typography className={classes.welcomeText}>
+              Welcome back to E4U
+            </Typography>
           </Box>
           <Box className={classes.formTitle}>
             <Typography className={classes.formTitleText}>Sign In</Typography>
@@ -33,18 +68,25 @@ const Login = () => {
               className={classes.formInput}
               placeholder="Username"
               startAdornment={<PersonOutline className={classes.inputIcon} />}
+              onChange={onUsernameChange}
             />
             <InputBase
               className={classes.formInput}
               placeholder="Password"
               startAdornment={<VpnKey className={classes.inputIcon} />}
+              type="password"
+              onChange={onPassChange}
             />
             <Box className={classes.btnField}>
-              <Button className={classes.submitBtn}>
+              <Button className={classes.submitBtn} onClick={onLogin}>
                 <Typography>Login</Typography>
               </Button>
             </Box>
-            <Typography className={classes.registerText} component={Link} to={REGISTER}>
+            <Typography
+              className={classes.registerText}
+              component={Link}
+              to={REGISTER}
+            >
               Create new account
             </Typography>
             <Typography className={classes.homeText} component={Link} to={HOME}>
@@ -160,11 +202,11 @@ const useStyles = makeStyles((theme) => ({
   },
   registerText: {
     textAlign: "center",
-    color: "#9B9B9B"
+    color: "#9B9B9B",
   },
   homeText: {
     textAlign: "center",
     color: "#9B9B9B",
-    marginTop: theme.spacing(2)
-  }
+    marginTop: theme.spacing(2),
+  },
 }));
