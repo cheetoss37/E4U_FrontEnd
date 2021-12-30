@@ -56,16 +56,16 @@ export const postResult = (data) => axios.post(`${AppConst.API_URL}`, data);
 
 //user
 export const getUser = (data) =>
-  axios.get(`${AppConst.API_URL}/user/list`, { params: data });
+  axios.post(`${AppConst.API_URL}/users/list`, data);
 
 export const searchUser = (data) =>
-  axios.post(`${AppConst.API_URL}/user/search`, data);
+  axios.post(`${AppConst.API_URL}/users/search`, data);
 
-export const createUser = (date) =>
-  axios.post(`${AppConst.API_URL}/user/create`, data);
+export const createUser = (data) =>
+  axios.post(`${AppConst.API_URL}/users/create`, data);
 
 export const updateUser = (data) =>
-  axios.put(`${AppConst.API_URL}/user/update`, data);
+  axios.put(`${AppConst.API_URL}/users/update`, data);
 
 export const deleteUser = (data) =>
-  axios.delete(`${AppConst.API_URL}/user/delete`, data);
+  axios.post(`${AppConst.API_URL}/users/delete`, data);

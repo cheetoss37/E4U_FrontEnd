@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
   Box,
@@ -12,15 +12,28 @@ import { getUserRole } from "../../../../utils";
 import trashIcon from "../../../../assets/icons/trash-2.png";
 import AddUserModal from "./AddUserModal";
 import DeleteUserModal from "./DeleteUserModal";
+import { useSelector, useDispatch } from "react-redux";
+import { AppConst } from "../../../../constants";
+import * as actions from "../../../../redux/actions";
 
 const ManageUserBody = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user?.listUser) || [];
+  const totalPage = useSelector((state) => state.user?.totalPage);
+  const error = useSelector((state) => state.user?.error);
+  const defaultPassword = "0123456789";
+  const userInfo = JSON.parse(localStorage.getItem(AppConst.USER_PROFILE));
+
   const [isAddUserModal, setIsAddUserModal] = useState(false);
   const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const [selectedId, setSelectedId] = useState("");
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
+  const [email, setEmail] = useState("");
   const [page, setPage] = useState(1);
+  const [onSearch, setOnSearch] = useState("");
 
   const onUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -34,12 +47,29 @@ const ManageUserBody = () => {
     setRole(e.target.value);
   };
 
+  const onChangeEmail = (e) => {
+    setEmail(e.target.value);
+  };
   const onOpenAddUserModal = () => {
     setIsAddUserModal(true);
   };
 
-  const onOpenDeleteUserModal = () => {
+  const onSearchChange = (e) => {
+    setOnSearch(e.target.value);
+  };
+
+  const onSubmitSearch = (e) => {
+    e.preventDefault();
+    let data = {
+      page: 1,
+      query: onSearch,
+    };
+    dispatch(actions.searchUserRequest(data));
+  };
+
+  const onOpenDeleteUserModal = (value) => {
     setIsDeleteModal(true);
+    setSelectedId(value);
   };
 
   const onCloseModal = () => {
@@ -48,43 +78,71 @@ const ManageUserBody = () => {
     setUsername("");
     setName("");
     setRole("");
+    setSelectedId("");
   };
 
   const onAddUser = () => {
     if (username && name && role) {
-      const newUser = {
+      let newUser = {
         username: username,
         name: name,
+        password: defaultPassword,
         role: role,
       };
-      //Dispath create user
+      dispatch(actions.createUserRequest(newUser));
     } else {
-      console.log("Nope");
+      alert("Vui lòng điền đủ thông tin!");
     }
     onCloseModal();
   };
 
   const onDeleteUser = () => {
-    alert("delete");
-    //Dispath delete user
+    let data = {
+      role: userInfo?.user?.role,
+      selectedId: selectedId,
+    };
+    console.log(data);
+    dispatch(actions.deleteUserRequest(data));
+    onCloseModal();
   };
 
   const onPageChange = (event, value) => {
     setPage(value);
-    console.log(value);
-    //dispatch get paging data
+    dispatch(actions.getListUserRequest({ page: value }));
   };
 
+  useEffect(() => {
+    if (error) {
+      alert("Đã xảy ra lỗi, vui lòng thử lại!");
+      window.location.reload();
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (isAddUserModal && !error) {
+      alert("Thêm người dùng mới thành công");
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (isDeleteModal && !error) {
+      alert("Xóa người dùng thành công");
+    }
+  }, [error]);
   return (
     <Box className={classes.homeContainer}>
       <AdminSidebar />
       <Box className={classes.homeBody}>
         <Box className={classes.userContainer}>
           <Box className={classes.manageUserHeader}>
-            <InputBase
-              placeholder="Tìm kiếm..."
-              className={classes.searchInput}
-            />
+            <form onSubmit={onSubmitSearch}>
+              <InputBase
+                placeholder="Tìm kiếm..."
+                className={classes.searchInput}
+                onChange={onSearchChange}
+                value={onSearch}
+              />
+            </form>
             <Button
               className={classes.addBtn}
               onClick={() => {
@@ -95,8 +153,8 @@ const ManageUserBody = () => {
             </Button>
           </Box>
           <Box className={classes.manageUserBody}>
-            {FakeData.map((data) => (
-              <Box className={classes.userRow} key={data.id}>
+            {user.map((data) => (
+              <Box className={classes.userRow} key={data._id}>
                 <Box className={classes.usernameField}>
                   <Typography className={classes.userContent}>
                     Họ tên: {data.name}
@@ -112,21 +170,28 @@ const ManageUserBody = () => {
                     Chức vụ: {getUserRole(data.role)}
                   </Typography>
                 </Box>
-                <Box
-                  className={classes.actionField}
-                  onClick={() => {
-                    onOpenDeleteUserModal();
-                  }}
-                >
-                  <img src={trashIcon} className={classes.trashIcon} />
-                  <Typography className={classes.userContent}>Xóa</Typography>
-                </Box>
+                {data?.role !== AppConst.USER_ROLE.admin ? (
+                  <Box
+                    className={classes.actionField}
+                    onClick={() => {
+                      onOpenDeleteUserModal(data?._id);
+                    }}
+                  >
+                    <img src={trashIcon} className={classes.trashIcon} />
+                    <Typography className={classes.userContent}>Xóa</Typography>
+                  </Box>
+                ) : (
+                  <Box className={classes.actionField}>
+                    <Box src={trashIcon} className={classes.trashIcon} />
+                    <Typography className={classes.userContent}></Typography>
+                  </Box>
+                )}
               </Box>
             ))}
           </Box>
           <Box className={classes.manageUserFooter}>
             <Pagination
-              count={10}
+              count={totalPage}
               page={page}
               variant="outlined"
               shape="rounded"
@@ -139,10 +204,12 @@ const ManageUserBody = () => {
             onConfirm={onAddUser}
             username={username}
             name={name}
+            email={email}
             role={role}
             onUsernameChange={onUsernameChange}
             onNameChange={onNameChange}
             onChangeRole={onChangeRole}
+            onChangeEmail={onChangeEmail}
           />
           <DeleteUserModal
             isOpen={isDeleteModal}
@@ -242,13 +309,3 @@ export const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
 }));
-
-const FakeData = [
-  { id: 1, name: "Nguyễn Văn A", email: "nguyenvana@gmail.com", role: 1 },
-  { id: 2, name: "Nguyễn Văn B", email: "nguyenvanb@gmail.com", role: 2 },
-  { id: 3, name: "Nguyễn Văn C", email: "nguyenvanc@gmail.com", role: 1 },
-  { id: 4, name: "Nguyễn Văn D", email: "nguyenvand@gmail.com", role: 2 },
-  { id: 5, name: "Nguyễn Văn E", email: "nguyenvane@gmail.com", role: 1 },
-  { id: 6, name: "Nguyễn Văn F", email: "nguyenvanf@gmail.com", role: 1 },
-  { id: 7, name: "Nguyễn Văn G", email: "nguyenvang@gmail.com", role: 2 },
-];

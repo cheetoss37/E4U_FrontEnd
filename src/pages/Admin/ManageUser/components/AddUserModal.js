@@ -21,9 +21,11 @@ const AddUserModal = ({
   username,
   name,
   role,
+  email,
   onChangeRole,
   onUsernameChange,
   onNameChange,
+  onChangeEmail,
 }) => {
   const classes = useStyles();
 
@@ -39,6 +41,12 @@ const AddUserModal = ({
             value={username}
             placeholder="Username"
             onChange={onUsernameChange}
+          />
+          <InputBase
+            className={classes.name}
+            value={email}
+            placeholder="Email"
+            onChange={onChangeEmail}
           />
           <InputBase
             className={classes.name}
