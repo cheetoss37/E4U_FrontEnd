@@ -21,14 +21,14 @@ export default function authReducer(state = INITITAL_STATE, action) {
         ...state,
         user: action.payload.user,
         token: action.payload.token,
-        loading: false,
+        isFetching: false,
         isAuth: true,
       };
     case type.POST_LOGIN_FAILED:
       return {
         ...state,
         error: action.payload,
-        loading: false,
+        isFetching: false,
         isAuth: false,
       };
     case type.POST_REGISTER_REQUESTED:
@@ -40,13 +40,13 @@ export default function authReducer(state = INITITAL_STATE, action) {
       return {
         ...state,
         user: action.payload.user,
-        loading: false,
+        isFetching: false,
       };
     case type.POST_REGISTER_FAILED:
       return {
         ...state,
         error: action.payload,
-        loading: false,
+        isFetching: false,
       };
     case type.RESET:
       return {

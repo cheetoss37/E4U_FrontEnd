@@ -16,16 +16,26 @@ function* login(action) {
       yield put({ type: "POST_LOGIN_FAILED", response });
     }
   } catch (error) {
-    yield put({ type: "POST_LOGIN_FAILED", error: error });
+    yield put({ type: "POST_LOGIN_FAILED", payload: error });
   }
 }
 
-// function* register(action) {
-//   try {
-//   } catch (error) {}
-// }
+function* register(action) {
+  try {
+    const response = yield call(api.register, action.payload);
+    console.log(response.status);
+    if (response.status === AppConst.STT_OK) {
+      yield put({ type: "POST_REGISTER_SUCCESS", payload: response.data });
+    } else {
+      yield put({ type: "POST_REGISTER_FAILED", payload: response });
+    }
+  } catch (error) {
+    console.log(error);
+    yield put({ type: "POST_REGISTER_FAILED", payload: error });
+  }
+}
 
 export function* authSaga() {
   yield takeLatest(type.POST_LOGIN_REQUESTED, login);
-  //   yield takeLatest(type.POST_REGISTER_REQUESTED, register);
+  yield takeLatest(type.POST_REGISTER_REQUESTED, register);
 }

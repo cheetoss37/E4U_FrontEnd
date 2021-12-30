@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
   Box,
@@ -10,10 +10,63 @@ import AppLogo from "../../assets/icons/home-logo.png";
 import { PersonOutline, VpnKey, MailOutlineOutlined } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { LOGIN, HOME } from "../../constants/path.const";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../../redux/actions";
+import { useHistory } from "react-router-dom";
 
 const Register = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const error = useSelector((state) => state.auth.error);
+  const user = useSelector((state) => state.auth.user);
+  const history = useHistory();
 
+  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+
+  const onUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const onNameChange = (e) => {
+    setName(e.target.value);
+  };
+  const onPassChange = (e) => {
+    setPass(e.target.value);
+  };
+
+  const onEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const onSubmit = () => {
+    const data = {
+      username: username,
+      name: name,
+      password: pass,
+      email: email,
+    };
+    setUsername("");
+    setPass("");
+    setName("");
+    setEmail("");
+    dispatch(actions.postRegisterStart(data));
+  };
+
+  useEffect(() => {
+    if (error) {
+      alert("Đã xảy ra lỗi, vui lòng thử lại");
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (Object.keys(user).length > 0) {
+      alert("Đăng ký thành công");
+      history.push(LOGIN);
+    }
+  }, [user]);
   return (
     <Box className={classes.regsterContainer}>
       <Box className={classes.regsterBody}>
@@ -37,25 +90,36 @@ const Register = () => {
             <InputBase
               className={classes.formInput}
               placeholder="Username"
+              value={username}
+              onChange={onUsernameChange}
+              startAdornment={<PersonOutline className={classes.inputIcon} />}
+            />
+            <InputBase
+              className={classes.formInput}
+              placeholder="Họ tên"
+              value={name}
+              onChange={onNameChange}
               startAdornment={<PersonOutline className={classes.inputIcon} />}
             />
             <InputBase
               className={classes.formInput}
               placeholder="Email"
-              startAdornment={<MailOutlineOutlined className={classes.inputIcon} />}
+              value={email}
+              onChange={onEmailChange}
+              startAdornment={
+                <MailOutlineOutlined className={classes.inputIcon} />
+              }
             />
             <InputBase
               className={classes.formInput}
               placeholder="Password"
-              startAdornment={<VpnKey className={classes.inputIcon} />}
-            />
-            <InputBase
-              className={classes.formInput}
-              placeholder="Confirm password"
+              type="password"
+              value={pass}
+              onChange={onPassChange}
               startAdornment={<VpnKey className={classes.inputIcon} />}
             />
             <Box className={classes.btnField}>
-              <Button className={classes.submitBtn}>
+              <Button className={classes.submitBtn} onClick={onSubmit}>
                 <Typography>Register</Typography>
               </Button>
             </Box>

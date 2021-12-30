@@ -20,6 +20,8 @@ const Login = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const isAuth = useSelector((state) => state.auth.isAuth);
+  const role = useSelector((state) => state.auth?.user?.role);
+  const error = useSelector((state) => state.auth.error);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -41,10 +43,22 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (isAuth) {
+    if (
+      (isAuth && role === AppConst.USER_ROLE.admin) ||
+      role === AppConst.USER_ROLE.author
+    ) {
+      history.push(PathConst.ADMIN_HOME);
+    }
+    if (isAuth && role === AppConst.USER_ROLE.normalUser) {
       history.push(PathConst.HOME);
     }
   }, [isAuth]);
+
+  useEffect(() => {
+    if (error) {
+      alert("Sai tên đăng nhập hoặc mật khẩu");
+    }
+  }, [error]);
 
   return (
     <Box className={classes.loginContainer}>

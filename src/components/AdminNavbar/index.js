@@ -19,6 +19,7 @@ const AdminNavbar = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
+  const userInfo = JSON.parse(localStorage.getItem(AppConst.USER_PROFILE));
 
   const onLogout = () => {
     dispatch(actions.reset());
@@ -36,7 +37,11 @@ const AdminNavbar = () => {
         </Box>
         <Box className={classes.appBarRight}>
           <Box className={classes.appUser}>
-            <Avatar />
+            <Box>
+              {" "}
+              <Avatar />
+              <Typography>{userInfo?.user?.name}</Typography>
+            </Box>
             <Button className={classes.logoutBtn} onClick={onLogout}>
               <Typography className={classes.logoutBtnText}>Logout</Typography>
             </Button>

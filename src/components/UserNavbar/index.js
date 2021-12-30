@@ -100,10 +100,13 @@ const Usernavbar = () => {
           )}
           <Box className={classes.appUser}>
             {userInfo ? (
-              <Avatar
-                src={userInfo?.user?.profilePic}
-                onClick={onOpenUserOption}
-              />
+              <Box>
+                <Avatar
+                  src={userInfo?.user?.profilePic}
+                  onClick={onOpenUserOption}
+                />
+                <Typography>{userInfo?.user?.name}</Typography>
+              </Box>
             ) : (
               <Button className={classes.loginBtn} component={Link} to={LOGIN}>
                 <Typography className={classes.loginBtnText}>Login</Typography>

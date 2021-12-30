@@ -111,7 +111,7 @@ const DoTestBody = () => {
         setSeconds(seconds - 1);
       }
       if (seconds === 0) {
-        if (minute === 0) {
+        if (minute === 0 && isDoTest) {
           const userSelectedAnswer = getUserSelectedAnswer(listQuestion);
           const trueAnswer = getTrueAnswer(listQuestion);
           const result = getResultTest(trueAnswer, userSelectedAnswer);
