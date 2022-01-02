@@ -17,8 +17,8 @@ import { useHistory } from "react-router-dom";
 const Register = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.auth.error);
-  const user = useSelector((state) => state.auth.user);
+  const error = useSelector((state) => state.auth?.error);
+  const user = useSelector((state) => state.auth?.user);
   const history = useHistory();
 
   const [username, setUsername] = useState("");

@@ -10,9 +10,9 @@ const reducer = combineReducers({
   auth: authReducer,
   doTest: snDoTestReducer,
   user: userReducer,
-  // test: testReducer,
+  test: testReducer,
   // question: questionReducer,
-  // result: resultReducer,
+  result: resultReducer,
 });
 
 export default reducer;

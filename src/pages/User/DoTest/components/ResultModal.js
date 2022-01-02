@@ -12,25 +12,27 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { PathConst } from "../../../../constants";
 
-const ResultModal = ({ onConfirm, onClose, isOpen }) => {
+const ResultModal = ({ onConfirm, onClose, isOpen, userInfo }) => {
   const classes = useStyles();
   const result = useSelector((state) => state.doTest.testData?.point);
 
   return (
     <Dialog open={isOpen} classes={{ paper: classes.dialog }}>
       <DialogTitle className={classes.dialogName}>
-        Nộp bài thành công
+        {userInfo ? "Nộp bài thành công" : "Hãy đăng ký để có thêm thông tin"}
       </DialogTitle>
-      <DialogContent>
-        <Typography>Kết quả: {result}</Typography>
-      </DialogContent>
+      {userInfo && (
+        <DialogContent>
+          <Typography>Kết quả: {result}</Typography>
+        </DialogContent>
+      )}
       <DialogActions className={classes.btnField}>
         <Button
           className={classes.submitButton}
           component={Link}
-          to={PathConst.HOME}
+          to={userInfo ? PathConst.HOME : PathConst.REGISTER}
         >
-          Về trang chủ
+          {userInfo ? "Về trang chủ" : "Đăng ký"}
         </Button>
       </DialogActions>
     </Dialog>

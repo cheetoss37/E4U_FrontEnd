@@ -21,20 +21,22 @@ export const deleteQuestion = (data) =>
   axios.delete(`${AppConst.API_URL}/question/delete`, data);
 
 //test
-export const getTestsList = (data) =>
-  axios.delete(`${AppConst.API_URL}/test/list`, data);
+export const getTestsList = (
+  data // admin
+) => axios.post(`${AppConst.API_URL}/test/list`, data);
 
 export const searchTest = (data) =>
   axios.post(`${AppConst.API_URL}/test/search`, data);
 
 export const getDetail = (data) =>
-  axios.get(`${AppConst.API_URL}/test/detail${data}`);
+  axios.get(`${AppConst.API_URL}/test/detail/${data}`);
 
-export const getListPublic = (data) =>
-  axios.get(`${AppConst.API_URL}/test/exams`, { params: data });
+export const getListTest = (
+  data //user
+) => axios.post(`${AppConst.API_URL}/test/exams`, data);
 
-export const publishTest = (data) =>
-  axios.put(`${AppConst.API_URL}/test/exams`, data);
+// export const publishTest = (data) =>
+//   axios.put(`${AppConst.API_URL}/test/exams`, data);
 
 export const createTest = (data) =>
   axios.post(`${AppConst.API_URL}/test/create`, data);
@@ -52,7 +54,8 @@ export const getListResult = (data) =>
 export const getResultDetail = (data) =>
   axios.get(`${AppConst.API_URL}/result/${data}`);
 
-export const postResult = (data) => axios.post(`${AppConst.API_URL}`, data);
+export const postResult = (data) =>
+  axios.post(`${AppConst.API_URL}/result/create`, data);
 
 //user
 export const getUser = (data) =>

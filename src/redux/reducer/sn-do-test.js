@@ -6,7 +6,7 @@ const INITITAL_STATE = {
     testTime: null,
     point: null,
   },
-  listQuestions: [],
+  listQuestion: [],
   selectedQuestion: { id: 0, answer: [], selectedAnswer: "" },
   selectedQuestionId: 1,
 };
@@ -22,7 +22,7 @@ export default function snDoTestReducer(state = INITITAL_STATE, action) {
     case type.SET_LIST_QUESTION:
       return {
         ...state,
-        listQuestions: action.payload,
+        listQuestion: action.payload,
       };
     case type.SET_TEST_DATA:
       return {

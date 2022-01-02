@@ -13,11 +13,14 @@ export const QUESTION_LEVEL = {
   hard: 3,
 };
 
-export const TEST_TYPE = {};
+export const TEST_TYPE = {
+  userTest: 1,
+  freeTest: 2,
+};
 
 export const TEST_STATUS = {
-  public: 1,
-  unpublic: 2,
+  unpublic: 1,
+  public: 2,
 };
 
 export const TEST_LEVEL = {

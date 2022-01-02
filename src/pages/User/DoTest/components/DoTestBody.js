@@ -17,10 +17,16 @@ import {
   getTrueAnswer,
 } from "../../../../utils";
 import ResultModal from "./ResultModal";
+import { useParams } from "react-router-dom";
+import { AppConst } from "../../../../constants";
 
 const DoTestBody = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { id } = useParams();
+  const userInfo = JSON.parse(localStorage.getItem(AppConst.USER_PROFILE));
+
+  const testDataAPI = useSelector((state) => state.test.testDetail);
   const testData = useSelector((state) => state.doTest.testData);
   const selectedQuestion = useSelector(
     (state) => state.doTest.selectedQuestion
@@ -28,12 +34,11 @@ const DoTestBody = () => {
   const selectedQuestionId = useSelector(
     (state) => state.doTest.selectedQuestionId
   );
-  const listQuestion = useSelector((state) => state.doTest.listQuestions);
+  const listQuestion = useSelector((state) => state.doTest.listQuestion);
   const questionIndex = listQuestion.findIndex(
     (item) => item?.questionId === selectedQuestion?.questionId
   );
 
-  const [isStartDoTest, setIsStartDoTest] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isShowResult, setIsShowResult] = useState(false);
   const [minute, setMinute] = useState(0);
@@ -47,13 +52,25 @@ const DoTestBody = () => {
 
     const userTestData = {
       ...testData,
+      testId: testData._id,
+      listQuestion: listQuestion,
       point: `${result}/${listQuestion.length}`,
     };
     dispatch(actions.setTestData(userTestData));
     setIsShowResult(true);
     setIsConfirmOpen(false);
-
-    //dispatch API post test result (testData with testId and userId)
+    if (userInfo) {
+      dispatch(
+        actions.postResultRequest({
+          userId: userInfo?.user?._id,
+          testData: userTestData,
+          point: `${result}/${listQuestion.length}`,
+          username: userInfo?.user?.username,
+          name: userInfo?.user?.name,
+          email: userInfo?.user?.email,
+        })
+      );
+    }
   };
 
   const onStartDoTest = () => {
@@ -65,22 +82,23 @@ const DoTestBody = () => {
     setIsConfirmOpen(true);
     let newTestData = {
       ...testData,
-      listQuestions: listQuestion,
+      listQuestion: listQuestion,
     };
     dispatch(actions.setTestData(newTestData));
   };
 
   const onChange = (event, value) => {
-    setIsStartDoTest(true);
-    let newSelectedAnswer = value;
-    let newSelectedQuestionData = {
-      ...selectedQuestion,
-      selectedAnswer: newSelectedAnswer.toString(),
-    };
-    let newListQuestion = [...listQuestion];
-    newListQuestion[questionIndex] = newSelectedQuestionData;
-    dispatch(actions.setSelectedQuestion(newSelectedQuestionData));
-    dispatch(actions.setListQuestion(newListQuestion));
+    if (isDoTest) {
+      let newSelectedAnswer = value;
+      let newSelectedQuestionData = {
+        ...selectedQuestion,
+        selectedAnswer: newSelectedAnswer.toString(),
+      };
+      let newListQuestion = [...listQuestion];
+      newListQuestion[questionIndex] = newSelectedQuestionData;
+      dispatch(actions.setSelectedQuestion(newSelectedQuestionData));
+      dispatch(actions.setListQuestion(newListQuestion));
+    }
   };
 
   const onSelectedQuestion = (data) => {
@@ -88,22 +106,28 @@ const DoTestBody = () => {
   };
 
   useEffect(() => {
-    dispatch(actions.setListQuestion(FAKE_DATA.listQuestions));
-  }, [dispatch]);
+    if (Object.keys(testDataAPI).length > 0) {
+      dispatch(actions.setListQuestion(testDataAPI.listQuestion));
+    }
+  }, [dispatch, testDataAPI]);
 
   useEffect(() => {
-    if (listQuestion.length > 0 && !isStartDoTest) {
+    if (listQuestion.length > 0 && !isDoTest) {
       dispatch(actions.setSelectedQuestion(listQuestion[0]));
     }
   }, [listQuestion, dispatch]);
 
   useEffect(() => {
     let refactorData = {
-      ...FAKE_DATA,
+      ...testDataAPI,
       point: 0,
     };
     dispatch(actions.setTestData(refactorData));
-  }, [dispatch]);
+  }, [dispatch, testDataAPI]);
+
+  useEffect(() => {
+    dispatch(actions.getTestDetail(id));
+  }, []);
 
   useEffect(() => {
     const countDown = setInterval(() => {
@@ -220,7 +244,7 @@ const DoTestBody = () => {
           setIsConfirmOpen(false);
         }}
       />
-      <ResultModal isOpen={isShowResult} />
+      <ResultModal isOpen={isShowResult} userInfo={Boolean(userInfo)} />
     </Container>
   );
 };
@@ -346,70 +370,3 @@ const useStyles = makeStyles((theme) => ({
   },
   questionIndex: {},
 }));
-
-const FAKE_DATA = {
-  testName: "Bài kiểm tra 1",
-  testTime: 1,
-  listQuestions: [
-    {
-      questionId: 1,
-      questionName: "Question 11111111111111111111111111111111111111",
-      answer: [
-        { answerId: 1, answerName: "answer 1" },
-        { answerId: 2, answerName: "answer 2" },
-        { answerId: 3, answerName: "answer 3" },
-        { answerId: 4, answerName: "answer 4" },
-      ],
-      trueAnswer: 4,
-      selectedAnswer: "",
-    },
-    {
-      questionId: 2,
-      questionName: "Question 2222222222222222222222222222222",
-      answer: [
-        { answerId: 5, answerName: "answer 5" },
-        { answerId: 6, answerName: "answer 6" },
-        { answerId: 7, answerName: "answer 7" },
-        { answerId: 8, answerName: "answer 8" },
-      ],
-      trueAnswer: 8,
-      selectedAnswer: "",
-    },
-    {
-      questionId: 3,
-      questionName: "Question 33333333333333333333",
-      answer: [
-        { answerId: 9, answerName: "answer 9" },
-        { answerId: 10, answerName: "answer 10" },
-        { answerId: 11, answerName: "answer 11" },
-        { answerId: 12, answerName: "answer 12" },
-      ],
-      trueAnswer: 10,
-      selectedAnswer: "",
-    },
-    {
-      questionId: 4,
-      questionName: "Question 455555555555555555555",
-      answer: [
-        { answerId: 13, answerName: "answer 1" },
-        { answerId: 14, answerName: "answer 2" },
-        { answerId: 15, answerName: "answer 3" },
-        { answerId: 16, answerName: "answer 4" },
-      ],
-      trueAnswer: 13,
-      selectedAnswer: "",
-    },
-    {
-      questionId: 5,
-      questionName: "Question 511111111111111",
-      answer: [
-        { answerId: 17, answerName: "answer 1" },
-        { answerId: 18, answerName: "answer 2" },
-        { answerId: 19, answerName: "answer 3" },
-        { answerId: 20, answerName: "answer 4" },
-      ],
-      trueAnswer: 17,
-      selectedAnswer: "",
-    },
-  ],
-};

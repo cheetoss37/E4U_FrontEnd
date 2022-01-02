@@ -1,0 +1,49 @@
+import { call, put, takeLatest } from "redux-saga/effects";
+import * as api from "../services/common.service";
+import * as type from "../redux/types";
+import { AppConst } from "../constants";
+
+function* getAllTest(action) {
+  try {
+    const response = yield call(api.getTestsList, action.payload);
+    if (response.status === AppConst.STT_OK) {
+      yield put({ type: "GET_ALL_TEST_SUCCESS", payload: response.data });
+    } else {
+      yield put({ type: "GET_ALL_TEST_FAILED", payload: response });
+    }
+  } catch (error) {
+    yield put({ type: "GET_ALL_TEST_FAILED", payload: error });
+  }
+}
+
+function* getPublicTest(action) {
+  try {
+    const response = yield call(api.getListTest, action.payload);
+    if (response.status === AppConst.STT_OK) {
+      yield put({ type: "GET_PUBLIC_TEST_SUCCESS", payload: response.data });
+    } else {
+      yield put({ type: "GET_PUBLIC_TEST_FAILED", payload: response });
+    }
+  } catch (error) {
+    yield put({ type: "GET_PUBLIC_TEST_FAILED", payload: error });
+  }
+}
+
+function* getTestDetail(action) {
+  try {
+    const response = yield call(api.getDetail, action.payload);
+    if (response.status === AppConst.STT_OK) {
+      yield put({ type: "GET_TEST_DETAIL_SUCCESS", payload: response.data });
+    } else {
+      yield put({ type: "GET_TEST_DETAIL_FAILED", payload: response });
+    }
+  } catch (error) {
+    yield put({ type: "GET_TEST_DETAIL_FAILED", payload: error });
+  }
+}
+
+export function* testSaga() {
+  yield takeLatest(type.GET_ALL_TEST_REQUEST, getAllTest);
+  yield takeLatest(type.GET_PUBLIC_TEST_REQUEST, getPublicTest);
+  yield takeLatest(type.GET_TEST_DETAIL_REQUEST, getTestDetail);
+}
