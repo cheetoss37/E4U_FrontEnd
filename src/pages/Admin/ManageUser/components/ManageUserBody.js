@@ -135,14 +135,16 @@ const ManageUserBody = () => {
       <Box className={classes.homeBody}>
         <Box className={classes.userContainer}>
           <Box className={classes.manageUserHeader}>
-            <form onSubmit={onSubmitSearch}>
-              <InputBase
-                placeholder="Tìm kiếm..."
-                className={classes.searchInput}
-                onChange={onSearchChange}
-                value={onSearch}
-              />
-            </form>
+            <Box>
+              <form onSubmit={onSubmitSearch}>
+                <InputBase
+                  placeholder="Tìm kiếm..."
+                  className={classes.searchInput}
+                  onChange={onSearchChange}
+                  value={onSearch}
+                />
+              </form>
+            </Box>
             <Button
               className={classes.addBtn}
               onClick={() => {
@@ -249,6 +251,7 @@ export const useStyles = makeStyles((theme) => ({
   manageUserHeader: {
     flex: "0 1 auto",
     marginBottom: theme.spacing(2),
+    display: "flex",
   },
   manageUserBody: {
     flex: "1 1 auto",
