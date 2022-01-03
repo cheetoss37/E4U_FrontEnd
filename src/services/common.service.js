@@ -18,7 +18,7 @@ export const updateQuestion = (data) =>
   axios.put(`${AppConst.API_URL}/question/update`, data);
 
 export const deleteQuestion = (data) =>
-  axios.delete(`${AppConst.API_URL}/question/delete`, data);
+  axios.post(`${AppConst.API_URL}/question/delete`, data);
 
 //test
 export const getTestsList = (

@@ -70,6 +70,41 @@ export default function questionReducer(state = INITITAL_STATE, action) {
         isFetching: false,
         error: action.payload,
       };
+    case type.DELETE_QUESTION_REQUEST:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case type.DELETE_QUESTION_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+      };
+    case type.DELETE_QUESTION_FAILED:
+      return {
+        ...state,
+        isFetching: false,
+        error: action.payload,
+      };
+    case type.SEARCH_QUESTION_REQUEST:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case type.SEARCH_QUESTION_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        listQuestion: action.payload.questionData,
+        totalPage: action.payload.totalPage,
+        page: action.payload.currentPage,
+      };
+    case type.SEARCH_QUESTION_FAILED:
+      return {
+        ...state,
+        isFetching: false,
+        error: action.payload,
+      };
     default:
       return state;
   }

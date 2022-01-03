@@ -20,16 +20,21 @@ import DeleteQuestionModal from "./DeleteQuestionModal";
 import AddQuestionModal from "./AddQuestionModal";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../../redux/actions";
+import { AppConst } from "../../../../constants";
+
 const ManageQuestionBody = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const listQuestion = useSelector((state) => state.question?.listQuestion);
   const totalPage = useSelector((state) => state.question?.totalPage);
+  const userInfo = JSON.parse(localStorage.getItem(AppConst.USER_PROFILE));
 
   const [isAddQuestion, setIsAddQuestion] = useState(false);
   const [isEditQuestion, setIsEditQuestion] = useState(false);
   const [isDeleteQuestion, setIsDeleteQuestion] = useState(false);
   const [page, setPage] = useState(1);
+  const [selectedId, setSelectedId] = useState("");
+  const [onSearch, setOnSearch] = useState("");
 
   const onOpenAddQuestionModal = () => {
     setIsAddQuestion(true);
@@ -45,12 +50,12 @@ const ManageQuestionBody = () => {
     setIsEditQuestion(true);
   };
 
-  const onOpenDeleteQuestionModal = () => {
+  const onOpenDeleteQuestionModal = (questionId) => {
     setIsDeleteQuestion(true);
+    setSelectedId(questionId);
   };
 
   const onAddQuestion = () => {
-    console.log();
     alert("add question");
     setIsAddQuestion(false);
   };
@@ -61,7 +66,11 @@ const ManageQuestionBody = () => {
   };
 
   const onDeleteQuestion = () => {
-    alert("delete question");
+    let data = {
+      role: userInfo?.user?.role,
+      questionId: selectedId,
+    };
+    dispatch(actions.deleteQuestionRequest(data));
     setIsDeleteQuestion(false);
   };
 
@@ -80,16 +89,33 @@ const ManageQuestionBody = () => {
     );
   };
 
+  const onSearchChange = (e) => {
+    setOnSearch(e.target.value);
+  };
+
+  const onSubmitSearch = (e) => {
+    e.preventDefault();
+    let data = {
+      page: 1,
+      query: onSearch,
+    };
+    dispatch(actions.searchQuestionRequest(data));
+  };
+
   return (
     <Box className={classes.homeContainer}>
       <AdminSidebar />
       <Box className={classes.homeBody}>
         <Box className={classes.questionContainer}>
           <Box className={classes.manageQuestionHeader}>
-            <InputBase
-              placeholder="Tìm kiếm..."
-              className={classes.searchInput}
-            />
+            <form onSubmit={onSubmitSearch}>
+              <InputBase
+                placeholder="Tìm kiếm..."
+                className={classes.searchInput}
+                onChange={onSearchChange}
+                value={onSearch}
+              />
+            </form>
             <Button className={classes.addBtn} onClick={onOpenAddQuestionModal}>
               Thêm câu hỏi
             </Button>
@@ -158,7 +184,7 @@ const ManageQuestionBody = () => {
                   <Box
                     className={classes.iconField}
                     onClick={() => {
-                      onOpenDeleteQuestionModal();
+                      onOpenDeleteQuestionModal(data?._id);
                     }}
                   >
                     <img src={TrashRed} />
@@ -226,6 +252,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   manageQuestionHeader: {
     flex: "0 1 auto",
+    display: "flex",
   },
   manageQuestionBody: {
     flex: "1 1 auto",
