@@ -5,10 +5,22 @@ import OurExamsBody from "./components/OurExamsBody";
 import AppFooter from "../../../components/AppFooter";
 import { useDispatch } from "react-redux";
 import * as actions from "../../../redux/actions";
+import { AppConst } from "../../../constants";
 
 const OurExams = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      actions.getPublicTestRequest({
+        page: 1,
+        state: AppConst.TEST_STATUS.public,
+        testType: AppConst.TEST_TYPE.userTest,
+      })
+    );
+  }, []);
+
   return (
     <Box className={classes.ourExamsContainer}>
       <Usernavbar />

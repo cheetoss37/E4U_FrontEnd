@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   makeStyles,
   Box,
@@ -6,16 +6,33 @@ import {
   Button,
   CircularProgress,
 } from "@material-ui/core";
-import FreeTestImg1 from "../../../../assets/images/free-test-1.png";
-import FreeTestImg2 from "../../../../assets/images/free-test-2.png";
 import FreeTestImg3 from "../../../../assets/images/free-test-3.png";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { Pagination } from "@material-ui/lab";
+import * as actions from "../../../../redux/actions";
+import { AppConst } from "../../../../constants";
 
 const FreeTestsBody = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const freeTest = useSelector((state) => state.test.publicTestList);
   const isFetching = useSelector((state) => state.test.isFetching);
+  const totalPage = useSelector((state) => state.test?.totalPage);
+
+  const [page, setPage] = useState(1);
+
+  const onPageChange = (event, value) => {
+    setPage(value);
+    dispatch(
+      actions.getPublicTestRequest({
+        page: value,
+        state: AppConst.TEST_STATUS.public,
+        testType: AppConst.TEST_TYPE.freeTest,
+      })
+    );
+  };
 
   return (
     <Box className={classes.freeTestContainer}>
@@ -70,6 +87,15 @@ const FreeTestsBody = () => {
           ))}
         </Box>
       )}
+      <Box className={classes.paginationField}>
+        <Pagination
+          count={totalPage}
+          page={page}
+          variant="outlined"
+          shape="rounded"
+          onChange={onPageChange}
+        />
+      </Box>
     </Box>
   );
 };
@@ -158,31 +184,10 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     fontWeight: "bold",
   },
+  paginationField: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: theme.spacing(2),
+  },
 }));
-
-const MockupData = [
-  {
-    id: 1,
-    testName: "ENTRANCE TEST A - E4U ENGLISH",
-    testTime: "20 Minutes",
-    testDescription:
-      "Bạn muốn được thử sức mình với những bài kiểm tra tiếng Anh để đánh giá lại kiến thức của bản thân? Bạn cũng muốn được trở thành 1 học viên E4U, cháy hết mình cùng những buổi học đầy năng lượng, đầy hào hứng tại E4U…. Hãy làm ngay bài test sau đây ..",
-    testImage: FreeTestImg1,
-  },
-  {
-    id: 2,
-    testName: "ENTRANCE TEST B - E4U ENGLISH",
-    testTime: "20 Minutes",
-    testDescription:
-      "Bạn muốn được thử sức mình với những bài kiểm tra tiếng Anh để đánh giá lại kiến thức của bản thân? Bạn cũng muốn được trở thành 1 học viên E4U, cháy hết mình cùng những buổi học đầy năng lượng, đầy hào hứng tại E4U…. Hãy làm ngay bài test sau đây ..",
-    testImage: FreeTestImg2,
-  },
-  {
-    id: 3,
-    testName: "ENTRANCE TEST C - E4U ENGLISH",
-    testTime: "20 Minutes",
-    testDescription:
-      "Bạn muốn được thử sức mình với những bài kiểm tra tiếng Anh để đánh giá lại kiến thức của bản thân? Bạn cũng muốn được trở thành 1 học viên E4U, cháy hết mình cùng những buổi học đầy năng lượng, đầy hào hứng tại E4U…. Hãy làm ngay bài test sau đây ..",
-    testImage: FreeTestImg3,
-  },
-];

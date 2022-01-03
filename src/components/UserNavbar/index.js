@@ -74,28 +74,32 @@ const Usernavbar = () => {
               >
                 About us
               </Typography>
-              <Typography
-                className={
-                  location.pathname === OUR_EXAMS
-                    ? classes.selectedLink
-                    : classes.linkText
-                }
-                component={Link}
-                to={OUR_EXAMS}
-              >
-                Our exams
-              </Typography>
-              <Typography
-                className={
-                  location.pathname === FREE_TEST
-                    ? classes.selectedLink
-                    : classes.linkText
-                }
-                component={Link}
-                to={FREE_TEST}
-              >
-                Free tests
-              </Typography>
+              {userInfo?.user?.role !== undefined && (
+                <Typography
+                  className={
+                    location.pathname === OUR_EXAMS
+                      ? classes.selectedLink
+                      : classes.linkText
+                  }
+                  component={Link}
+                  to={OUR_EXAMS}
+                >
+                  Our exams
+                </Typography>
+              )}
+              {userInfo?.user?.role === undefined && (
+                <Typography
+                  className={
+                    location.pathname === FREE_TEST
+                      ? classes.selectedLink
+                      : classes.linkText
+                  }
+                  component={Link}
+                  to={FREE_TEST}
+                >
+                  Free tests
+                </Typography>
+              )}
             </Box>
           )}
           <Box className={classes.appUser}>

@@ -7,6 +7,8 @@ const INITITAL_STATE = {
   testDetail: {},
   isFetching: false,
   error: null,
+  totalPage: 1,
+  page: 1,
 };
 
 export default function testReducer(state = INITITAL_STATE, action) {
@@ -21,6 +23,8 @@ export default function testReducer(state = INITITAL_STATE, action) {
         ...state,
         allTestList: action.payload.testData,
         isFetching: false,
+        totalPage: action.payload.totalPage,
+        page: action.payload.currentPage,
       };
     case type.GET_ALL_TEST_FAILED:
       return {
@@ -38,6 +42,8 @@ export default function testReducer(state = INITITAL_STATE, action) {
         ...state,
         isFetching: false,
         publicTestList: action.payload.testData,
+        totalPage: action.payload.totalPage,
+        page: action.payload.currentPage,
       };
     case type.GET_PUBLIC_TEST_FAILED:
       return {
