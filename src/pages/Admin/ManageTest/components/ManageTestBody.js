@@ -10,11 +10,17 @@ import AdminSidebar from "../../../../components/AdminSidebar";
 import { Pagination } from "@material-ui/lab";
 import { getTestStatus, getTestLevel } from "../../../../utils";
 import ActionMenu from "./ActionMenu";
+import { useSelector, useDispatch } from "react-redux";
+import * as actions from "../../../../redux/actions";
 
 const ManageTestBody = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const listTest = useSelector((state) => state.test?.allTestList);
+  const totalPage = useSelector((state) => state.test?.totalPage);
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [page, setPage] = useState(1);
 
   const onMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -22,6 +28,15 @@ const ManageTestBody = () => {
 
   const onClose = () => {
     setAnchorEl(null);
+  };
+
+  const onPageChange = (event, value) => {
+    setPage(value);
+    dispatch(
+      actions.getAllTestRequest({
+        page: value,
+      })
+    );
   };
 
   return (
@@ -37,8 +52,8 @@ const ManageTestBody = () => {
             <Button className={classes.addBtn}>Tạo bài kiểm tra</Button>
           </Box>
           <Box className={classes.manageTestBody}>
-            {FAKE_DATA.map((data) => (
-              <Box className={classes.testRow} key={data?.testId}>
+            {listTest.map((data) => (
+              <Box className={classes.testRow} key={data?._id}>
                 <Box className={classes.testName}>
                   <Typography className={classes.content}>
                     {data?.testName}
@@ -51,7 +66,7 @@ const ManageTestBody = () => {
                 </Box>
                 <Box className={classes.testStatus}>
                   <Typography className={classes.content}>
-                    Trạng thái: {getTestStatus(data?.testStatus)}
+                    Trạng thái: {getTestStatus(data?.state)}
                   </Typography>
                 </Box>
                 <Box className={classes.actionField} onClick={onMenuOpen}>
@@ -62,7 +77,13 @@ const ManageTestBody = () => {
             ))}
           </Box>
           <Box className={classes.manageTestFooter}>
-            <Pagination count={10} variant="outlined" shape="rounded" />
+            <Pagination
+              count={totalPage}
+              page={page}
+              variant="outlined"
+              shape="rounded"
+              onChange={onPageChange}
+            />
           </Box>
         </Box>
       </Box>

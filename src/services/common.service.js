@@ -3,7 +3,7 @@ import { AppConst } from "../constants";
 
 //question
 export const getQuestions = (data) =>
-  axios.get(`${AppConst.API_URL}/question/list`, { params: data });
+  axios.post(`${AppConst.API_URL}/question/list`, data);
 
 export const searchQuestion = (data) =>
   axios.post(`${AppConst.API_URL}/question/search`, data);

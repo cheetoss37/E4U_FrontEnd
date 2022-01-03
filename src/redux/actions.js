@@ -142,6 +142,11 @@ export const getQuestionDetailFailed = (error) => ({
   payload: error,
 });
 
+export const setNewSelectedQuestion = (question) => ({
+  type: type.SET_NEW_SELECTED_QUESTION,
+  payload: question,
+});
+
 //test
 
 export const getAllTestRequest = (test) => ({

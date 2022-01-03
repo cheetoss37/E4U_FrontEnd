@@ -10,12 +10,21 @@ import AdminSidebar from "../../../../components/AdminSidebar";
 import { Pagination } from "@material-ui/lab";
 import TrashRed from "../../../../assets/icons/trash-red.png";
 import EditIcon from "../../../../assets/icons/edit.png";
-import { getQuestionType, getQuestionLevel } from "../../../../utils";
+import {
+  getQuestionType,
+  getQuestionLevel,
+  getTrueAnswerText,
+  uuid,
+} from "../../../../utils";
 import DeleteQuestionModal from "./DeleteQuestionModal";
 import AddQuestionModal from "./AddQuestionModal";
-
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../../../../redux/actions";
 const ManageQuestionBody = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const listQuestion = useSelector((state) => state.question?.listQuestion);
+  const totalPage = useSelector((state) => state.question?.totalPage);
 
   const [isAddQuestion, setIsAddQuestion] = useState(false);
   const [isEditQuestion, setIsEditQuestion] = useState(false);
@@ -24,6 +33,12 @@ const ManageQuestionBody = () => {
 
   const onOpenAddQuestionModal = () => {
     setIsAddQuestion(true);
+    let answer = {
+      answerId: uuid(),
+      answerName: "",
+    };
+    let newQuestion = createNewQuestion(answer);
+    dispatch(actions.setNewSelectedQuestion(newQuestion));
   };
 
   const onOpenEditQuestionModal = () => {
@@ -35,6 +50,7 @@ const ManageQuestionBody = () => {
   };
 
   const onAddQuestion = () => {
+    console.log();
     alert("add question");
     setIsAddQuestion(false);
   };
@@ -57,8 +73,11 @@ const ManageQuestionBody = () => {
 
   const onPageChange = (event, value) => {
     setPage(value);
-    console.log(value);
-    //dispatch get paging data
+    dispatch(
+      actions.getListQuestionRequest({
+        page: value,
+      })
+    );
   };
 
   return (
@@ -89,7 +108,7 @@ const ManageQuestionBody = () => {
                 </Typography>
               </Box>
               <Box className={classes.questionResultHeader}>
-                <Typography className={classes.content}>Đáp án</Typography>
+                <Typography className={classes.content}>Đáp án đúng</Typography>
               </Box>
               <Box className={classes.questionLevelHeader}>
                 <Typography className={classes.content}>Độ khó</Typography>
@@ -98,17 +117,17 @@ const ManageQuestionBody = () => {
                 <Typography className={classes.content}>Chức năng</Typography>
               </Box>
             </Box>
-            {FAKE_DATA.map((data) => (
-              <Box className={classes.questionRow} key={data?.questionId}>
+            {listQuestion.map((data) => (
+              <Box className={classes.questionRow} key={data?._id}>
                 <Box className={classes.questionNameBody}>
                   <Typography className={classes.content}>
                     {data?.questionName}
                   </Typography>
                 </Box>
                 <Box className={classes.questionAnswerBody}>
-                  {data?.answer.map((answer) => (
-                    <Typography className={classes.content}>
-                      {answer.answerDetail}
+                  {data?.answer.map((answer, index) => (
+                    <Typography className={classes.content} key={index}>
+                      {index + 1}: {answer.answerName}
                     </Typography>
                   ))}
                 </Box>
@@ -118,9 +137,9 @@ const ManageQuestionBody = () => {
                   </Typography>
                 </Box>
                 <Box className={classes.questionResultBody}>
-                  {data?.trueAnswer.map((item) => (
-                    <Typography className={classes.content}>{item}</Typography>
-                  ))}
+                  <Typography className={classes.content}>
+                    {getTrueAnswerText(data?.answer, data?.trueAnswer)}
+                  </Typography>
                 </Box>
                 <Box className={classes.questionLevelBody}>
                   <Typography className={classes.content}>
@@ -150,7 +169,7 @@ const ManageQuestionBody = () => {
           </Box>
           <Box className={classes.manageQuestionFooter}>
             <Pagination
-              count={10}
+              count={totalPage}
               page={page}
               variant="outlined"
               shape="rounded"
@@ -174,6 +193,14 @@ const ManageQuestionBody = () => {
 };
 
 export default ManageQuestionBody;
+
+const createNewQuestion = (answer) => ({
+  questionType: 1,
+  questionName: "",
+  answer: [answer],
+  trueAnswer: answer.answerId,
+  questionLevel: 1,
+});
 
 export const useStyles = makeStyles((theme) => ({
   homeContainer: {
@@ -300,61 +327,3 @@ export const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-const FAKE_DATA = [
-  {
-    questionId: 1,
-    questionName: "How are you today?",
-    answer: [
-      { answerDetail: "A. I’m fine thank you. And you?" },
-      { answerDetail: "B. I’m fine thank you. And you?" },
-    ],
-    questionType: 1,
-    trueAnswer: [1],
-    questionLevel: 1,
-  },
-  {
-    questionId: 2,
-    questionName: "Do you remember the park ... we met?",
-    answer: [
-      { answerDetail: "A. I’m fine thank you. And you?" },
-      { answerDetail: "B. I’m fine thank you. And you?" },
-    ],
-    questionType: 1,
-    trueAnswer: [1],
-    questionLevel: 2,
-  },
-  {
-    questionId: 3,
-    questionName: "You’ve been tidying up, ... ?",
-    answer: [
-      { answerDetail: "A. I’m fine thank you. And you?" },
-      { answerDetail: "B. I’m fine thank you. And you?" },
-    ],
-    questionType: 1,
-    trueAnswer: [1],
-    questionLevel: 3,
-  },
-  {
-    questionId: 4,
-    questionName: "How are you today?",
-    answer: [
-      { answerDetail: "A. I’m fine thank you. And you?" },
-      { answerDetail: "B. I’m fine thank you. And you?" },
-    ],
-    questionType: 1,
-    trueAnswer: [1],
-    questionLevel: 1,
-  },
-  {
-    questionId: 5,
-    questionName: "How are you today?",
-    answer: [
-      { answerDetail: "A. I’m fine thank you. And you?" },
-      { answerDetail: "B. I’m fine thank you. And you?" },
-    ],
-    questionType: 2,
-    trueAnswer: [1],
-    questionLevel: 2,
-  },
-];

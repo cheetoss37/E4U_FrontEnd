@@ -11,7 +11,7 @@ const reducer = combineReducers({
   doTest: snDoTestReducer,
   user: userReducer,
   test: testReducer,
-  // question: questionReducer,
+  question: questionReducer,
   result: resultReducer,
 });
 

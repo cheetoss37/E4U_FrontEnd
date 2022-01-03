@@ -86,3 +86,11 @@ export const getResultTest = (trueAnswer, listQuestion) => {
   let result = trueAnswer.length - trueAnswerSelected.length;
   return result;
 };
+
+export const getTrueAnswerText = (listAnswer, answerId) => {
+  let trueAnswerText = listAnswer.filter(
+    (item) => item.answerId.toString() === answerId.toString()
+  );
+
+  return trueAnswerText[0].answerName;
+};
