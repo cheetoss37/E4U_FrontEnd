@@ -83,7 +83,11 @@ const AddQuestionModal = ({ onConfirm, onClose, isOpen }) => {
   };
 
   const onSaveQuestion = () => {
-    dispatch(actions.createQuestionRequest(questionDetail));
+    let newData = {
+      ...questionDetail,
+      selectedAnswer: "",
+    };
+    dispatch(actions.createQuestionRequest(newData));
     onClose();
   };
 

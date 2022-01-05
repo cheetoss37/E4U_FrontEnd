@@ -87,9 +87,39 @@ function* getListQuestionSearch(action) {
   }
 }
 
+function* editQuestion(action) {
+  try {
+    const response = yield call(api.updateQuestion, action.payload);
+    if (response.status === AppConst.STT_OK) {
+      yield put({
+        type: "UPDATE_QUESTION_SUCCESS",
+        payload: response.data,
+      });
+      try {
+        const response = yield call(api.getQuestions, action.payload);
+        if (response.status === AppConst.STT_OK) {
+          yield put({
+            type: "GET_LIST_QUESTION_SUCCESS",
+            payload: response.data,
+          });
+        } else {
+          yield put({ type: "GET_LIST_QUESTION_FAILED", payload: response });
+        }
+      } catch (error) {
+        yield put({ type: "GET_LIST_QUESTION_FAILED", payload: error });
+      }
+    } else {
+      yield put({ type: "UPDATE_QUESTION_FAILED", payload: response });
+    }
+  } catch (error) {
+    yield put({ type: "UPDATE_QUESTION_FAILED", payload: error });
+  }
+}
+
 export function* questionSaga() {
   yield takeLatest(type.GET_LIST_QUESTION_REQUEST, getLisetQuestion);
   yield takeLatest(type.POST_CREATE_QUESTION_REQUEST, createQuestion);
   yield takeLatest(type.DELETE_QUESTION_REQUEST, deleteQuestion);
   yield takeLatest(type.SEARCH_QUESTION_REQUEST, getListQuestionSearch);
+  yield takeLatest(type.UPDATE_QUESTION_REQUEST, editQuestion);
 }

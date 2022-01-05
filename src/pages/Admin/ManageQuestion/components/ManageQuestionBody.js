@@ -21,6 +21,7 @@ import AddQuestionModal from "./AddQuestionModal";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../../redux/actions";
 import { AppConst } from "../../../../constants";
+import EditQuestionModal from "./EditQuestionModal";
 
 const ManageQuestionBody = () => {
   const classes = useStyles();
@@ -46,8 +47,9 @@ const ManageQuestionBody = () => {
     dispatch(actions.setNewSelectedQuestion(newQuestion));
   };
 
-  const onOpenEditQuestionModal = () => {
+  const onOpenEditQuestionModal = (selectedQuestion) => {
     setIsEditQuestion(true);
+    dispatch(actions.setNewSelectedQuestion(selectedQuestion));
   };
 
   const onOpenDeleteQuestionModal = (questionId) => {
@@ -58,11 +60,6 @@ const ManageQuestionBody = () => {
   const onAddQuestion = () => {
     alert("add question");
     setIsAddQuestion(false);
-  };
-
-  const onEditQuestion = () => {
-    alert("edit question");
-    setIsEditQuestion(false);
   };
 
   const onDeleteQuestion = () => {
@@ -176,7 +173,7 @@ const ManageQuestionBody = () => {
                   <Box
                     className={classes.iconField}
                     onClick={() => {
-                      onOpenEditQuestionModal();
+                      onOpenEditQuestionModal(data);
                     }}
                   >
                     <img src={EditIcon} />
@@ -212,6 +209,7 @@ const ManageQuestionBody = () => {
             onClose={onClose}
             onConfirm={onAddQuestion}
           />
+          <EditQuestionModal isOpen={isEditQuestion} onClose={onClose} />
         </Box>
       </Box>
     </Box>

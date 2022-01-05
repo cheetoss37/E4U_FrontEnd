@@ -3,7 +3,7 @@ import * as type from "../types";
 
 const INITITAL_STATE = {
   listQuestion: [],
-  questionDetail: { answer: [] },
+  questionDetail: { answer: [], selectedAnswer: "" },
   page: 1,
   totalPage: 1,
   isFetching: false,
@@ -99,6 +99,22 @@ export default function questionReducer(state = INITITAL_STATE, action) {
         page: action.payload.currentPage,
       };
     case type.SEARCH_QUESTION_FAILED:
+      return {
+        ...state,
+        isFetching: false,
+        error: action.payload,
+      };
+    case type.UPDATE_QUESTION_REQUEST:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case type.UPDATE_QUESTION_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+      };
+    case type.UPDATE_QUESTION_FAILED:
       return {
         ...state,
         isFetching: false,
