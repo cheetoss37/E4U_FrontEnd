@@ -45,7 +45,7 @@ export const updateTest = (data) =>
   axios.put(`${AppConst.API_URL}/test/update`, data);
 
 export const deleteTest = (data) =>
-  axios.delete(`${AppConst.API_URL}/test/delete`, data);
+  axios.post(`${AppConst.API_URL}/test/delete`, data);
 
 //result
 export const getListResult = (data) =>

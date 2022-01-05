@@ -6,28 +6,74 @@ import {
   InputBase,
   Button,
 } from "@material-ui/core";
+import { AppConst } from "../../../../constants";
 import AdminSidebar from "../../../../components/AdminSidebar";
+import CreateTest from "./CreateTest";
 import { Pagination } from "@material-ui/lab";
 import { getTestStatus, getTestLevel } from "../../../../utils";
 import ActionMenu from "./ActionMenu";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../../../redux/actions";
+import DeleteConfirmModal from "./DeleteConfirmModal";
 
 const ManageTestBody = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const listTest = useSelector((state) => state.test?.allTestList);
   const totalPage = useSelector((state) => state.test?.totalPage);
+  const userInfo = JSON.parse(localStorage.getItem(AppConst.USER_PROFILE));
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [page, setPage] = useState(1);
+  const [onSearch, setOnSearch] = useState("");
+  const [isCreateTest, setIsCreateTest] = useState(false);
+  const [isEditTest, setIsEditTest] = useState(false);
+  const [isDeleteTest, setIsDeleteTest] = useState(false);
+  const [selectedTest, setSelectedTest] = useState();
 
-  const onMenuOpen = (event) => {
+  const onSearchChange = (e) => {
+    setOnSearch(e.target.value);
+  };
+
+  const onSubmitSearch = (e) => {
+    e.preventDefault();
+    let data = {
+      page: 1,
+      query: onSearch,
+    };
+    dispatch(actions.searchTestRequest(data));
+  };
+
+  const onMenuOpen = (testData) => (event) => {
     setAnchorEl(event.currentTarget);
+    setSelectedTest(testData);
   };
 
   const onClose = () => {
     setAnchorEl(null);
+    setIsDeleteTest(false);
+  };
+
+  const onCreateTestMode = () => {
+    setIsCreateTest(true);
+  };
+
+  const onCancelCreateTest = () => {
+    setIsCreateTest(false);
+  };
+
+  const onOpenConfirmDelete = () => {
+    setIsDeleteTest(true);
+    setAnchorEl(null);
+  };
+
+  const onConfirmDelete = () => {
+    setIsDeleteTest(false);
+    let data = {
+      role: userInfo?.user?.role,
+      testId: selectedTest._id,
+    };
+    dispatch(actions.deleteTestRequest(data));
   };
 
   const onPageChange = (event, value) => {
@@ -45,46 +91,85 @@ const ManageTestBody = () => {
       <Box className={classes.homeBody}>
         <Box className={classes.testContainer}>
           <Box className={classes.manageTestHeader}>
-            <InputBase
-              placeholder="Tìm kiếm..."
-              className={classes.searchInput}
-            />
-            <Button className={classes.addBtn}>Tạo bài kiểm tra</Button>
+            {!isCreateTest && !isEditTest && (
+              <form onSubmit={onSubmitSearch}>
+                <InputBase
+                  placeholder="Tìm kiếm..."
+                  className={classes.searchInput}
+                  onChange={onSearchChange}
+                  value={onSearch}
+                />
+              </form>
+            )}
+            {!isCreateTest && !isEditTest && (
+              <Button className={classes.addBtn} onClick={onCreateTestMode}>
+                Tạo bài kiểm tra
+              </Button>
+            )}
+            {isCreateTest && (
+              <Button
+                className={classes.cancelBtn}
+                onClick={onCancelCreateTest}
+              >
+                Hủy tạo bài kiểm tra
+              </Button>
+            )}
           </Box>
           <Box className={classes.manageTestBody}>
-            {listTest.map((data) => (
-              <Box className={classes.testRow} key={data?._id}>
-                <Box className={classes.testName}>
-                  <Typography className={classes.content}>
-                    {data?.testName}
-                  </Typography>
-                </Box>
-                <Box className={classes.testLevel}>
-                  <Typography className={classes.content}>
-                    Độ khó: {getTestLevel(data?.testLevel)}
-                  </Typography>
-                </Box>
-                <Box className={classes.testStatus}>
-                  <Typography className={classes.content}>
-                    Trạng thái: {getTestStatus(data?.state)}
-                  </Typography>
-                </Box>
-                <Box className={classes.actionField} onClick={onMenuOpen}>
-                  <Typography className={classes.content}>Chức năng</Typography>
-                </Box>
-                <ActionMenu anchorEl={anchorEl} onClose={onClose} />
+            {!isCreateTest && !isEditTest && (
+              <Box>
+                {listTest.map((data) => (
+                  <Box className={classes.testRow} key={data?._id}>
+                    <Box className={classes.testName}>
+                      <Typography className={classes.content}>
+                        {data?.testName}
+                      </Typography>
+                    </Box>
+                    <Box className={classes.testLevel}>
+                      <Typography className={classes.content}>
+                        Độ khó: {getTestLevel(data?.testLevel)}
+                      </Typography>
+                    </Box>
+                    <Box className={classes.testStatus}>
+                      <Typography className={classes.content}>
+                        Trạng thái: {getTestStatus(data?.state)}
+                      </Typography>
+                    </Box>
+                    <Box
+                      className={classes.actionField}
+                      onClick={onMenuOpen(data)}
+                    >
+                      <Typography className={classes.content}>
+                        Chức năng
+                      </Typography>
+                    </Box>
+                    <ActionMenu
+                      anchorEl={anchorEl}
+                      onClose={onClose}
+                      onOpenConfirmDelete={onOpenConfirmDelete}
+                    />
+                  </Box>
+                ))}
               </Box>
-            ))}
+            )}
+            {isCreateTest && <CreateTest />}
           </Box>
           <Box className={classes.manageTestFooter}>
-            <Pagination
-              count={totalPage}
-              page={page}
-              variant="outlined"
-              shape="rounded"
-              onChange={onPageChange}
-            />
+            {!isCreateTest && !isEditTest && (
+              <Pagination
+                count={totalPage}
+                page={page}
+                variant="outlined"
+                shape="rounded"
+                onChange={onPageChange}
+              />
+            )}
           </Box>
+          <DeleteConfirmModal
+            isOpen={isDeleteTest}
+            onClose={onClose}
+            onConfirm={onConfirmDelete}
+          />
         </Box>
       </Box>
     </Box>
@@ -117,6 +202,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   manageTestHeader: {
     flex: "0 1 auto",
+    display: "flex",
   },
   manageTestBody: {
     flex: "1 1 auto",
@@ -136,6 +222,15 @@ export const useStyles = makeStyles((theme) => ({
   addBtn: {
     background: "#F99846",
     textTransform: "none",
+  },
+  cancelBtn: {
+    background: "#F50808",
+    textTransform: "none",
+    color: "white",
+    fontWeight: "bold",
+    "&:hover": {
+      background: "#F50808",
+    },
   },
   testRow: {
     display: "flex",

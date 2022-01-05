@@ -50,19 +50,18 @@ export default function questionReducer(state = INITITAL_STATE, action) {
     case type.POST_CREATE_QUESTION_REQUEST:
       return {
         ...state,
-        isFetching: false,
-        error: action.payload,
+        isFetching: true,
       };
     case type.POST_CREATE_QUESTION_SUCCESS:
       return {
         ...state,
-        isFetching: true,
+        isFetching: false,
       };
     case type.POST_CREATE_QUESTION_FAILED:
       return {
         ...state,
         isFetching: false,
-        questionDetail: action.payload,
+        error: action.payload,
       };
     case type.GET_QUESTION_DETAIL_FAILED:
       return {

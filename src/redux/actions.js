@@ -149,6 +149,16 @@ export const setNewSelectedQuestion = (question) => ({
 
 //test
 
+export const setTestSelectedQuestion = (question) => ({
+  type: type.SET_TEST_SELECTED_QUESTION,
+  payload: question,
+});
+
+export const setNewTest = (test) => ({
+  type: type.SET_NEW_TEST,
+  payload: test,
+});
+
 export const getAllTestRequest = (test) => ({
   type: type.GET_ALL_TEST_REQUEST,
   payload: test,
