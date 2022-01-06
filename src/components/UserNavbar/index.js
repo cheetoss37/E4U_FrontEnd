@@ -104,10 +104,11 @@ const Usernavbar = () => {
           )}
           <Box className={classes.appUser}>
             {userInfo ? (
-              <Box>
+              <Box className={classes.infoField}>
                 <Avatar
                   src={userInfo?.user?.profilePic}
                   onClick={onOpenUserOption}
+                  className={classes.avatarField}
                 />
                 <Typography>{userInfo?.user?.name}</Typography>
               </Box>
@@ -185,5 +186,12 @@ const useStyles = makeStyles((theme) => ({
   },
   loginBtnText: {
     fontWeight: "bold",
+  },
+  infoField: {
+    display: "flex",
+    alignItems: "center",
+  },
+  avatarField: {
+    marginRight: theme.spacing(1),
   },
 }));

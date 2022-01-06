@@ -37,7 +37,7 @@ const AdminNavbar = () => {
         </Box>
         <Box className={classes.appBarRight}>
           <Box className={classes.appUser}>
-            <Box>
+            <Box className={classes.infoField}>
               {" "}
               <Avatar />
               <Typography>{userInfo?.user?.name}</Typography>
@@ -89,5 +89,10 @@ const useStyles = makeStyles((theme) => ({
   },
   logoutBtn: {
     textTransform: "none",
+  },
+  infoField: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
 }));

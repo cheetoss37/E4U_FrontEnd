@@ -29,11 +29,18 @@ const UserOptions = ({ anchorEl, onClose }) => {
     >
       <MenuItem
         onClick={() => {
+          onClose();
+        }}
+      >
+        <Typography className={classes.linkText}>Lịch sử làm bài</Typography>
+      </MenuItem>
+      <MenuItem
+        onClick={() => {
           onLogout();
           onClose();
         }}
       >
-        <Typography className={classes.linkText}>Logout</Typography>
+        <Typography className={classes.linkText}>Đăng xuất</Typography>
       </MenuItem>
     </Menu>
   );
