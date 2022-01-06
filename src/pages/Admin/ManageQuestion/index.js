@@ -18,7 +18,7 @@ const ManageQuestion = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (userInfo?.user?.role === AppConst.USER_ROLE.normalUser) {
+    if (userInfo?.user?.role === AppConst.USER_ROLE.normalUser || !userInfo) {
       history.push(PathConst.HOME);
     }
   }, []);

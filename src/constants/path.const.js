@@ -5,6 +5,8 @@ export const ABOUT = "/about";
 export const FREE_TEST = "/free-test";
 export const OUR_EXAMS = "/our-exams";
 export const DO_TESTS = "/do-test/:id";
+export const RESULT_LIST = "/result";
+export const RESULT_DETAIL = "/result/:id";
 
 export const ADMIN_HOME = "/admin/home";
 export const MANAGE_USER = "/admin/manage-user";

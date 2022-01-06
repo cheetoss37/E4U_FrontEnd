@@ -1,28 +1,18 @@
 import React, { useEffect } from "react";
 import { makeStyles, Box } from "@material-ui/core";
 import Usernavbar from "../../../components/UserNavbar";
-import OurExamsBody from "./components/OurExamsBody";
 import AppFooter from "../../../components/AppFooter";
 import { useDispatch } from "react-redux";
 import * as actions from "../../../redux/actions";
 import { AppConst, PathConst } from "../../../constants";
+import ResultBody from "./components/ResultBody";
 import { useHistory } from "react-router-dom";
 
-const OurExams = () => {
+const Result = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const history = useHistory();
+  const dispatch = useDispatch();
   const userInfo = JSON.parse(localStorage.getItem(AppConst.USER_PROFILE));
-
-  useEffect(() => {
-    dispatch(
-      actions.getPublicTestRequest({
-        page: 1,
-        state: AppConst.TEST_STATUS.public,
-        testType: AppConst.TEST_TYPE.userTest,
-      })
-    );
-  }, []);
 
   useEffect(() => {
     if (!userInfo) {
@@ -31,18 +21,18 @@ const OurExams = () => {
   }, []);
 
   return (
-    <Box className={classes.ourExamsContainer}>
+    <Box className={classes.resultContainer}>
       <Usernavbar />
-      <OurExamsBody />
+      <ResultBody />
       <AppFooter />
     </Box>
   );
 };
 
-export default OurExams;
+export default Result;
 
 const useStyles = makeStyles((theme) => ({
-  ourExamsContainer: {
+  resultContainer: {
     display: "flex",
     flexDirection: "column",
     height: "100vh",

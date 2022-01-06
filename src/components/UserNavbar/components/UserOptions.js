@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import * as actions from "../../../redux/actions";
 import { AppConst, PathConst } from "../../../constants";
 import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const UserOptions = ({ anchorEl, onClose }) => {
   const classes = useStyles();
@@ -27,11 +28,7 @@ const UserOptions = ({ anchorEl, onClose }) => {
       transformOrigin={{ vertical: "top", horizontal: "right" }}
       classes={{ paper: classes.root }}
     >
-      <MenuItem
-        onClick={() => {
-          onClose();
-        }}
-      >
+      <MenuItem component={Link} to={PathConst.RESULT_LIST}>
         <Typography className={classes.linkText}>Lịch sử làm bài</Typography>
       </MenuItem>
       <MenuItem
