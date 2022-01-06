@@ -4,7 +4,13 @@ import File from "../../../../assets/icons/file-text.png";
 import Edit from "../../../../assets/icons/edit.png";
 import Trash from "../../../../assets/icons/trash-red.png";
 
-const ActionMenu = ({ anchorEl, onClose, onOpenConfirmDelete, onEditTest }) => {
+const ActionMenu = ({
+  anchorEl,
+  onClose,
+  onOpenConfirmDelete,
+  onEditTest,
+  onPublistTest,
+}) => {
   const classes = useStyles();
 
   return (
@@ -21,7 +27,9 @@ const ActionMenu = ({ anchorEl, onClose, onOpenConfirmDelete, onEditTest }) => {
     >
       <MenuItem className={classes.menuItem}>
         <img src={File} />
-        <Typography className={classes.linkText}>Phát hành</Typography>
+        <Typography className={classes.linkText} onClick={onPublistTest}>
+          Phát hành
+        </Typography>
       </MenuItem>
       <MenuItem className={classes.menuItem}>
         <img src={Edit} />

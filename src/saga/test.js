@@ -100,7 +100,7 @@ function* editTest(action) {
         payload: response.data,
       });
       try {
-        const response = yield call(api.getQuestions, action.payload);
+        const response = yield call(api.getTestsList, action.payload);
         if (response.status === AppConst.STT_OK) {
           yield put({
             type: "GET_ALL_TEST_SUCCESS",

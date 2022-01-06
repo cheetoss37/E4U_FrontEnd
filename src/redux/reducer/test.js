@@ -156,6 +156,23 @@ export default function testReducer(state = INITITAL_STATE, action) {
         isFetching: false,
         error: action.payload,
       };
+    case type.PUBLISH_TEST_REQUEST:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case type.PUBLISH_TEST_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        status: 200,
+      };
+    case type.PUBLISH_TEST_FAILED:
+      return {
+        ...state,
+        isFetching: false,
+        error: action.payload,
+      };
     default:
       return state;
   }

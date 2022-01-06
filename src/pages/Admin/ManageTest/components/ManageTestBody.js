@@ -116,6 +116,15 @@ const ManageTestBody = () => {
     dispatch(actions.deleteTestRequest(data));
   };
 
+  const onPublistTest = () => {
+    let data = {
+      role: userInfo?.user?.role,
+      testId: selectedTest._id,
+      state: AppConst.TEST_STATUS.public,
+    };
+    dispatch(actions.updateTestRequest(data));
+  };
+
   const onPageChange = (event, value) => {
     setPage(value);
     dispatch(
@@ -193,6 +202,7 @@ const ManageTestBody = () => {
                       onClose={onClose}
                       onOpenConfirmDelete={onOpenConfirmDelete}
                       onEditTest={onEditTest}
+                      onPublistTest={onPublistTest}
                     />
                   </Box>
                 ))}
