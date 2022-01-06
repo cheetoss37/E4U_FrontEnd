@@ -91,6 +91,35 @@ function* deleteTest(action) {
   }
 }
 
+function* editTest(action) {
+  try {
+    const response = yield call(api.updateTest, action.payload);
+    if (response.status === AppConst.STT_OK) {
+      yield put({
+        type: "UPDATE_TEST_SUCCESS",
+        payload: response.data,
+      });
+      try {
+        const response = yield call(api.getQuestions, action.payload);
+        if (response.status === AppConst.STT_OK) {
+          yield put({
+            type: "GET_ALL_TEST_SUCCESS",
+            payload: response.data,
+          });
+        } else {
+          yield put({ type: "GET_ALL_TEST_FAILED", payload: response });
+        }
+      } catch (error) {
+        yield put({ type: "GET_ALL_TEST_FAILED", payload: error });
+      }
+    } else {
+      yield put({ type: "UPDATE_TEST_FAILED", payload: response });
+    }
+  } catch (error) {
+    yield put({ type: "UPDATE_TEST_FAILED", payload: error });
+  }
+}
+
 export function* testSaga() {
   yield takeLatest(type.GET_ALL_TEST_REQUEST, getAllTest);
   yield takeLatest(type.GET_PUBLIC_TEST_REQUEST, getPublicTest);
@@ -98,4 +127,5 @@ export function* testSaga() {
   yield takeLatest(type.SEARCH_TEST_REQUEST, getListTestSearch);
   yield takeLatest(type.CREATE_TEST_REQUEST, createTest);
   yield takeLatest(type.DELETE_TEST_REQUEST, deleteTest);
+  yield takeLatest(type.UPDATE_TEST_REQUEST, editTest);
 }

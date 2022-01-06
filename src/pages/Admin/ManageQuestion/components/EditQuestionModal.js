@@ -87,7 +87,6 @@ const EditQuestionModal = ({ onConfirm, onClose, isOpen }) => {
 
   const onSaveQuestion = () => {
     const { _id, ...newQuestionData } = questionDetail;
-    console.log(newQuestionData);
     let newData = {
       ...newQuestionData,
       questionId: questionDetail._id,

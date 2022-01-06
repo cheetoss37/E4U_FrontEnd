@@ -9,6 +9,7 @@ import {
 import { AppConst } from "../../../../constants";
 import AdminSidebar from "../../../../components/AdminSidebar";
 import CreateTest from "./CreateTest";
+import EditTest from "./EditTest";
 import { Pagination } from "@material-ui/lab";
 import { getTestStatus, getTestLevel } from "../../../../utils";
 import ActionMenu from "./ActionMenu";
@@ -60,6 +61,45 @@ const ManageTestBody = () => {
 
   const onCancelCreateTest = () => {
     setIsCreateTest(false);
+    const defaultData = {
+      testName: "",
+      testType: 2,
+      testTime: "",
+      testLevel: 1,
+      state: 1,
+      listQuestion: [],
+    };
+    dispatch(actions.setNewTest(defaultData));
+  };
+
+  const onEditTest = () => {
+    setIsEditTest(true);
+    setAnchorEl(null);
+    const newListQuestionArray = selectedTest?.listQuestion.map(
+      ({ questionId: _id, ...rest }) => ({
+        _id,
+        ...rest,
+      })
+    );
+    let newTestData = {
+      ...selectedTest,
+      listQuestion: newListQuestionArray,
+    };
+
+    dispatch(actions.setNewTest(newTestData));
+  };
+
+  const onCancelEditTest = () => {
+    setIsEditTest(false);
+    const defaultData = {
+      testName: "",
+      testType: 2,
+      testTime: "",
+      testLevel: 1,
+      state: 1,
+      listQuestion: [],
+    };
+    dispatch(actions.setNewTest(defaultData));
   };
 
   const onOpenConfirmDelete = () => {
@@ -114,6 +154,11 @@ const ManageTestBody = () => {
                 Hủy tạo bài kiểm tra
               </Button>
             )}
+            {isEditTest && (
+              <Button className={classes.cancelBtn} onClick={onCancelEditTest}>
+                Hủy sửa bài kiểm tra
+              </Button>
+            )}
           </Box>
           <Box className={classes.manageTestBody}>
             {!isCreateTest && !isEditTest && (
@@ -147,12 +192,14 @@ const ManageTestBody = () => {
                       anchorEl={anchorEl}
                       onClose={onClose}
                       onOpenConfirmDelete={onOpenConfirmDelete}
+                      onEditTest={onEditTest}
                     />
                   </Box>
                 ))}
               </Box>
             )}
             {isCreateTest && <CreateTest />}
+            {isEditTest && <EditTest />}
           </Box>
           <Box className={classes.manageTestFooter}>
             {!isCreateTest && !isEditTest && (
@@ -265,10 +312,3 @@ export const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1, 0),
   },
 }));
-
-const FAKE_DATA = [
-  { testId: 1, testName: "Bài kiểm tra 1", testLevel: 2, testStatus: 2 },
-  { testId: 2, testName: "Bài kiểm tra 2", testLevel: 3, testStatus: 1 },
-  { testId: 3, testName: "Bài kiểm tra 3", testLevel: 2, testStatus: 2 },
-  { testId: 4, testName: "Bài kiểm tra 4", testLevel: 1, testStatus: 1 },
-];
