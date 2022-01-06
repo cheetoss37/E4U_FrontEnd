@@ -123,6 +123,8 @@ const ManageTestBody = () => {
       state: AppConst.TEST_STATUS.public,
     };
     dispatch(actions.updateTestRequest(data));
+    setAnchorEl(null);
+    window.location.reload();
   };
 
   const onPageChange = (event, value) => {
