@@ -49,7 +49,7 @@ export const deleteTest = (data) =>
 
 //result
 export const getListResult = (data) =>
-  axios.get(`${AppConst.API_URL}/result/list`, data);
+  axios.post(`${AppConst.API_URL}/result/list`, data);
 
 export const getResultDetail = (data) =>
   axios.get(`${AppConst.API_URL}/result/${data}`);

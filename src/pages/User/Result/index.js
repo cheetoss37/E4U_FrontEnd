@@ -20,6 +20,12 @@ const Result = () => {
     }
   }, []);
 
+  useEffect(() => {
+    dispatch(
+      actions.getListResultRequest({ page: 1, userId: userInfo?.user?._id })
+    );
+  }, []);
+
   return (
     <Box className={classes.resultContainer}>
       <Usernavbar />
