@@ -31,7 +31,7 @@ function* getlistResult(action) {
 
 function* getResultDetail(action) {
   try {
-    const response = yield call(api.getListResult, action.payload);
+    const response = yield call(api.getResultDetail, action.payload);
     if (response.status === AppConst.STT_OK) {
       yield put({ type: "GET_RESULT_DETAIL_SUCCESS", payload: response.data });
     } else {

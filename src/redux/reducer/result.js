@@ -37,7 +37,7 @@ export default function resultReducer(state = INITITAL_STATE, action) {
     case type.GET_RESULT_DETAIL_SUCCESS:
       return {
         ...state,
-        resultDetail: action.payload.testData,
+        resultDetail: action.payload,
         isFetching: false,
       };
     case type.GET_RESULT_DETAIL_FAILED:

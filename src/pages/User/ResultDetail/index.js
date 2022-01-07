@@ -7,17 +7,23 @@ import * as actions from "../../../redux/actions";
 import { AppConst, PathConst } from "../../../constants";
 import ResultDetailBody from "./components/ResultDetailBody";
 import { useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const ResultDetail = () => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
+  const { id } = useParams();
   const userInfo = JSON.parse(localStorage.getItem(AppConst.USER_PROFILE));
 
   useEffect(() => {
     if (!userInfo) {
       history.push(PathConst.HOME);
     }
+  }, []);
+
+  useEffect(() => {
+    dispatch(actions.getResultDetail(id));
   }, []);
 
   return (
