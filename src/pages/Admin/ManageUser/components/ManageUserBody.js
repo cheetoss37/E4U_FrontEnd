@@ -77,6 +77,7 @@ const ManageUserBody = () => {
     setIsDeleteModal(false);
     setUsername("");
     setName("");
+    setEmail("");
     setRole("");
     setSelectedId("");
   };
@@ -86,6 +87,7 @@ const ManageUserBody = () => {
       let newUser = {
         username: username,
         name: name,
+        email: email,
         password: defaultPassword,
         role: role,
       };

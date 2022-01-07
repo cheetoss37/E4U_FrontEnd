@@ -15,6 +15,7 @@ import ManageUser from "./pages/Admin/ManageUser";
 import ManageQuestion from "./pages/Admin/ManageQuestion";
 import DoTest from "./pages/User/DoTest";
 import Result from "./pages/User/Result";
+import ResultDetail from "./pages/User/ResultDetail";
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
@@ -32,6 +33,7 @@ const App = () => {
           <Route path={PathConst.MANAGE_USER} component={ManageUser} />
           <Route path={PathConst.MANAGE_QUESTION} component={ManageQuestion} />
           <Route path={PathConst.RESULT_LIST} component={Result} />
+          <Route path={PathConst.RESULT_DETAIL} component={ResultDetail} />
         </Switch>
       </Router>
     </ThemeProvider>

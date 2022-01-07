@@ -6,7 +6,6 @@ import { AppConst } from "../../../../constants";
 const AdminHomeBody = () => {
   const classes = useStyles();
   const user = JSON.parse(localStorage.getItem(AppConst.USER_PROFILE));
-  console.log(user);
   return (
     <Box className={classes.homeContainer}>
       <AdminSidebar />

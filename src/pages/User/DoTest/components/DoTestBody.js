@@ -130,35 +130,38 @@ const DoTestBody = () => {
   }, []);
 
   useEffect(() => {
-    const countDown = setInterval(() => {
-      if (seconds > 0) {
-        setSeconds(seconds - 1);
-      }
-      if (seconds === 0) {
-        if (minute === 0 && isDoTest) {
-          const userSelectedAnswer = getUserSelectedAnswer(listQuestion);
-          const trueAnswer = getTrueAnswer(listQuestion);
-          const result = getResultTest(trueAnswer, userSelectedAnswer);
-
-          const userTestData = {
-            ...testData,
-            point: `${result}/${listQuestion.length}`,
-          };
-          dispatch(actions.setTestData(userTestData));
-          setIsShowResult(true);
-          return () => {
-            clearInterval(countDown);
-          };
-        } else {
-          setMinute(minute - 1);
-          setSeconds(59);
+    if (minute > 0) {
+      const countDown = setInterval(() => {
+        if (seconds > 0) {
+          setSeconds(seconds - 1);
         }
-      }
-    }, 1000);
+        if (seconds === 0) {
+          if (minute === 0 && isDoTest) {
+            const userSelectedAnswer = getUserSelectedAnswer(listQuestion);
+            const trueAnswer = getTrueAnswer(listQuestion);
+            const result = getResultTest(trueAnswer, userSelectedAnswer);
 
-    return () => {
-      clearInterval(countDown);
-    };
+            const userTestData = {
+              ...testData,
+              point: `${result}/${listQuestion.length}`,
+            };
+            dispatch(actions.setTestData(userTestData));
+            setIsShowResult(true);
+            console.log(minute);
+            return () => {
+              clearInterval(countDown);
+            };
+          } else {
+            setMinute(minute - 1);
+            setSeconds(59);
+          }
+        }
+      }, 1000);
+
+      return () => {
+        clearInterval(countDown);
+      };
+    }
   });
 
   return (

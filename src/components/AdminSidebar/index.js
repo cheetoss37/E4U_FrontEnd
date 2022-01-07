@@ -1,11 +1,12 @@
 import React from "react";
 import { makeStyles, Box, Typography } from "@material-ui/core";
 import { Link, useLocation } from "react-router-dom";
-import { PathConst } from "../../constants";
+import { AppConst, PathConst } from "../../constants";
 
 const AdminSidebar = () => {
   const classes = useStyles();
   const location = useLocation();
+  const userInfo = JSON.parse(localStorage.getItem(AppConst.USER_PROFILE));
 
   return (
     <Box className={classes.sidebarContainer}>
@@ -17,7 +18,10 @@ const AdminSidebar = () => {
               : classes.sidebarItem
           }
           component={Link}
-          to={PathConst.MANAGE_USER}
+          to={
+            userInfo?.user?.role === AppConst.USER_ROLE.admin &&
+            PathConst.MANAGE_USER
+          }
         >
           <Typography>Quản lý người dùng</Typography>
         </Box>
