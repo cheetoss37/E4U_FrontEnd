@@ -1,4 +1,3 @@
-import { AppConst } from "../../constants";
 import * as type from "../types";
 
 const INITITAL_STATE = {

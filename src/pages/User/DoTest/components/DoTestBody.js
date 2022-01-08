@@ -130,7 +130,7 @@ const DoTestBody = () => {
   }, []);
 
   useEffect(() => {
-    if (minute > 0) {
+    if (isDoTest) {
       const countDown = setInterval(() => {
         if (seconds > 0) {
           setSeconds(seconds - 1);
@@ -161,7 +161,7 @@ const DoTestBody = () => {
         clearInterval(countDown);
       };
     }
-  });
+  }, [isDoTest, minute, seconds]);
 
   return (
     <Container className={classes.doTestContainer}>
