@@ -103,7 +103,6 @@ const ManageUserBody = () => {
       role: userInfo?.user?.role,
       selectedId: selectedId,
     };
-    console.log(data);
     dispatch(actions.deleteUserRequest(data));
     onCloseModal();
   };

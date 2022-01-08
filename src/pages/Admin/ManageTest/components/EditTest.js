@@ -98,7 +98,6 @@ const EditTest = () => {
     let newListQuestionRemoved = newList.filter(function (item) {
       return item._id !== question._id;
     });
-    console.log(newListQuestionRemoved);
     let newTestData = {
       ...testDetail,
       listQuestion: newListQuestionRemoved,

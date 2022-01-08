@@ -147,7 +147,6 @@ const DoTestBody = () => {
             };
             dispatch(actions.setTestData(userTestData));
             setIsShowResult(true);
-            console.log(minute);
             return () => {
               clearInterval(countDown);
             };

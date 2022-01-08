@@ -23,14 +23,12 @@ function* login(action) {
 function* register(action) {
   try {
     const response = yield call(api.register, action.payload);
-    console.log(response.status);
     if (response.status === AppConst.STT_OK) {
       yield put({ type: "POST_REGISTER_SUCCESS", payload: response.data });
     } else {
       yield put({ type: "POST_REGISTER_FAILED", payload: response });
     }
   } catch (error) {
-    console.log(error);
     yield put({ type: "POST_REGISTER_FAILED", payload: error });
   }
 }
