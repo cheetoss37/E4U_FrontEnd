@@ -94,3 +94,11 @@ export const getTrueAnswerText = (listAnswer, answerId) => {
 
   return trueAnswerText[0].answerName;
 };
+
+export const getSelectedAnswerText = (listAnswer, answerId) => {
+  let trueAnswerText = listAnswer.filter(
+    (item) => item.answerId.toString() === answerId.toString()
+  );
+
+  return trueAnswerText[0].answerName;
+};
