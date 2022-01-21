@@ -16,6 +16,7 @@ import ActionMenu from "./ActionMenu";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../../../redux/actions";
 import DeleteConfirmModal from "./DeleteConfirmModal";
+import ExecuteData from "./ExecuteData";
 
 const ManageTestBody = () => {
   const classes = useStyles();
@@ -31,6 +32,7 @@ const ManageTestBody = () => {
   const [isEditTest, setIsEditTest] = useState(false);
   const [isDeleteTest, setIsDeleteTest] = useState(false);
   const [selectedTest, setSelectedTest] = useState();
+  const [isOpenExecuteData, setIsOpenExecuteData] = useState(false);
 
   const onSearchChange = (e) => {
     setOnSearch(e.target.value);
@@ -53,6 +55,7 @@ const ManageTestBody = () => {
   const onClose = () => {
     setAnchorEl(null);
     setIsDeleteTest(false);
+    setIsOpenExecuteData(false);
   };
 
   const onCreateTestMode = () => {
@@ -136,6 +139,14 @@ const ManageTestBody = () => {
     );
   };
 
+  const onGetTestExecuteData = (testId) => {
+    let data = {
+      testId: testId,
+    };
+    dispatch(actions.getNumberTestExecuteRequest(data));
+    setIsOpenExecuteData(true);
+  };
+
   return (
     <Box className={classes.homeContainer}>
       <AdminSidebar />
@@ -176,7 +187,16 @@ const ManageTestBody = () => {
               <Box>
                 {listTest.map((data) => (
                   <Box className={classes.testRow} key={data?._id}>
-                    <Box className={classes.testName}>
+                    <Box
+                      className={classes.testName}
+                      onClick={
+                        data?.state === AppConst.TEST_STATUS.unpublic
+                          ? null
+                          : () => {
+                              onGetTestExecuteData(data?._id);
+                            }
+                      }
+                    >
                       <Typography className={classes.content}>
                         {data?.testName}
                       </Typography>
@@ -229,6 +249,7 @@ const ManageTestBody = () => {
             onClose={onClose}
             onConfirm={onConfirmDelete}
           />
+          <ExecuteData isOpen={isOpenExecuteData} onClose={onClose} />
         </Box>
       </Box>
     </Box>
@@ -301,6 +322,9 @@ export const useStyles = makeStyles((theme) => ({
     width: "40%",
     padding: theme.spacing(0, 2),
     borderRight: "1px solid #C4C4C4",
+    "&:hover": {
+      cursor: "pointer",
+    },
   },
   testStatus: {
     width: "20%",
