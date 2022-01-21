@@ -12,6 +12,7 @@ const INITITAL_STATE = {
     listQuestion: [],
   },
   testListQuestion: [],
+  executeInfo: [],
   isFetching: false,
   error: null,
   status: null,
@@ -64,6 +65,23 @@ export default function testReducer(state = INITITAL_STATE, action) {
         page: action.payload.currentPage,
       };
     case type.GET_PUBLIC_TEST_FAILED:
+      return {
+        ...state,
+        isFetching: false,
+        error: action.payload,
+      };
+    case type.GET_TEST_EXECUTE_NUMBER_REQUEST:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case type.GET_TEST_EXECUTE_NUMBER_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        executeInfo: action.payload,
+      };
+    case type.GET_TEST_EXECUTE_NUMBER_FAILED:
       return {
         ...state,
         isFetching: false,

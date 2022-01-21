@@ -204,6 +204,21 @@ export const getTestDetailFailed = (error) => ({
   payload: error,
 });
 
+export const getNumberTestExecuteRequest = (test) => ({
+  type: type.GET_TEST_EXECUTE_NUMBER_REQUEST,
+  payload: test,
+});
+
+export const getNumberTestExecuteSuccess = (test) => ({
+  type: type.GET_TEST_EXECUTE_NUMBER_SUCCESS,
+  payload: test,
+});
+
+export const getNumberTestExecuteFailed = (error) => ({
+  type: type.GET_TEST_EXECUTE_NUMBER_FAILED,
+  payload: error,
+});
+
 export const createTestRequest = (test) => ({
   type: type.CREATE_TEST_REQUEST,
   payload: test,

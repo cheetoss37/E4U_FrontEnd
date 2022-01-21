@@ -29,6 +29,22 @@ function* getPublicTest(action) {
   }
 }
 
+function* executeTestNumber(action) {
+  try {
+    const response = yield call(api.getExecuteTestNumber, action.payload);
+    if (response.status === AppConst.STT_OK) {
+      yield put({
+        type: "GET_TEST_EXECUTE_NUMBER_SUCCESS",
+        payload: response.data,
+      });
+    } else {
+      yield put({ type: "GET_TEST_EXECUTE_NUMBER_FAILED", payload: response });
+    }
+  } catch (error) {
+    yield put({ type: "GET_TEST_EXECUTE_NUMBER_FAILED", payload: error });
+  }
+}
+
 function* getTestDetail(action) {
   try {
     const response = yield call(api.getDetail, action.payload);
@@ -128,4 +144,5 @@ export function* testSaga() {
   yield takeLatest(type.CREATE_TEST_REQUEST, createTest);
   yield takeLatest(type.DELETE_TEST_REQUEST, deleteTest);
   yield takeLatest(type.UPDATE_TEST_REQUEST, editTest);
+  yield takeLatest(type.GET_TEST_EXECUTE_NUMBER_REQUEST, executeTestNumber);
 }

@@ -35,8 +35,8 @@ export const getListTest = (
   data //user
 ) => axios.post(`${AppConst.API_URL}/test/exams`, data);
 
-// export const publishTest = (data) =>
-//   axios.put(`${AppConst.API_URL}/test/exams`, data);
+export const getExecuteTestNumber = (data) =>
+  axios.post(`${AppConst.API_URL}/result/number-of-execute`, data);
 
 export const createTest = (data) =>
   axios.post(`${AppConst.API_URL}/test/create`, data);
